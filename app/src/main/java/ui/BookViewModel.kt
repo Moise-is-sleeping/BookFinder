@@ -1,5 +1,6 @@
 package ui
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,10 +15,11 @@ class BookViewModel: ViewModel() {
     private var bookApiService = BookApiService()
     var json by mutableStateOf("")
 
-    fun getBooks(){
+    fun getBooks(id:String){
         viewModelScope.launch(Dispatchers.IO) {
-            val book = bookApiService.getBook()
+            val book = bookApiService.getBook("OL46071324M")
             json = book.title
+            Log.d("","")
         }
     }
 }
