@@ -5,23 +5,35 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Book(
-    val description: Description,
-    val links: List<Link>,
     val title: String,
-    val covers: List<Int>,
-    val subject_places: List<String>,
-    @SerialName("first_publish_date") val firstPublishDate: String,
-    val subject_people: List<String>,
     val key: String,
     val authors: List<AuthorInfo>,
-    val excerpts: List<Excerpt>,
+    val description: String,
+    val covers: List<Int>,
+    val subject_places: List<String>,
     val subjects: List<String>,
+    val links: List<Link>,
     val type: Type,
+    val subject_people: List<String>,
     @SerialName("subject_times") val subjectTimes: List<String>,
+    val location :String,
     @SerialName("latest_revision") val latestRevision: Int,
     val revision: Int,
     val created: Created,
-    @SerialName("last_modified") val lastModified: LastModified
+    @SerialName("last_modified") val lastModified: LastModified,
+
+    @SerialName("first_publish_date") val firstPublishDate: String,
+
+
+
+    val excerpts: List<Excerpt>,
+
+
+
+
+
+
+
 )
 
 @Serializable

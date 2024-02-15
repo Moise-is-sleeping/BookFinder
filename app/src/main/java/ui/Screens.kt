@@ -17,14 +17,14 @@ import coil.compose.AsyncImage
 
 @Composable
 fun Screen(bookViewModel:BookViewModel){
-    var text by remember { mutableStateOf("Hello") }
+    var text by remember { mutableStateOf("") }
     val list by bookViewModel.list.collectAsState()
     Column (modifier = Modifier.fillMaxSize()){
         Text(text =list.toString())
         AsyncImage(model ="https://ia600607.us.archive.org/view_archive.php?archive=/22/items/olcovers24/olcovers24-L.zip&file=240727-L.jpg" , contentDescription ="test" )
         TextField(value = text, onValueChange ={text = it} )
         Button(onClick = {
-            bookViewModel.searchBooks(text)
+            bookViewModel.getBooks("OL1718419W")
         }) {
 
         }

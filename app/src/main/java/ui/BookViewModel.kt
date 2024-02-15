@@ -22,26 +22,37 @@ class BookViewModel: ViewModel() {
     private var bookRepository = BookRepository(bookApiService)
     var json by mutableStateOf("")
 
-    private var  _list = MutableStateFlow<MutableList<String>>(mutableListOf())
+    private var  _list = MutableStateFlow<List<String>>(emptyList())
     var list: StateFlow<List<String>> = _list.asStateFlow()
 
 
-//    fun getBooks(id:String){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            val book = bookApiService.getBook("OL46071324M")
-//            json = book.title
-//            Log.d("","")
-//        }
-//    }
+    fun getBooks(id:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            val book = bookApiService.getBook(id)
+
+        }
+    }
 
     fun searchBooks(search:String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = bookRepository.searchBooksState(search)
+            val tempList = mutableListOf<String>()
             Log.d("results",result!!.docs.toString())
+            for (doc in result.docs){
+                val id = doc.key.substring(7)
+                tempList.add(id)
+            }
+            _list.value = tempList
+//            getAllBooks(_list)
+        }
+    }
+    fun getAllBooks(books: MutableStateFlow<List<String>>){
+        for (i in 0..20){
+            try {
+                getBooks("OL1718419W")
+            }catch (e:Exception){
 
-                    for (doc in result.docs){
-                        _list.value.add(doc.key)
-                    }
+            }
 
         }
     }
