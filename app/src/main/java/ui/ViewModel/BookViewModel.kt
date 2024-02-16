@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import ui.state.BookState
 
 
 class BookViewModel: ViewModel() {
@@ -20,16 +21,16 @@ class BookViewModel: ViewModel() {
     private var bookRepository = BookRepository(bookApiService)
 
 
-    private var  _bookList = MutableStateFlow<List<Book?>>(emptyList())
-    var bookList: StateFlow<List<Book?>> = _bookList.asStateFlow()
+    private var  _bookList = MutableStateFlow<List<BookState?>>(emptyList())
+    var bookList: StateFlow<List<BookState?>> = _bookList.asStateFlow()
 
 
 
     fun getBooks(ids: MutableList<String>){
         viewModelScope.launch(Dispatchers.IO) {
-            val tempList = mutableListOf<Book?>()
+            val tempList = mutableListOf<BookState?>()
             for (id in ids){
-                val book = bookApiService.getBook(id).body()
+                val book = bookRepository.getBookState(id)
                 tempList.add(book)
             }
             _bookList.value = tempList

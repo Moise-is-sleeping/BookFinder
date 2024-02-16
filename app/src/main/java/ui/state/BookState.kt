@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BookState(
-    val title: String? = "",
+    val title: String? = DEFAUTL_TITLE,
     val covers: List<Int>? = emptyList(),
     val subjects: List<String>? = emptyList(),
     val links: List<Link>? = emptyList(),

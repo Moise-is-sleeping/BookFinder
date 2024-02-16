@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.calculator.bookfinder.ui.theme.BookFinderTheme
+import ui.Screens.HomeScreen
 import ui.ViewModel.BookViewModel
 import ui.Screens.Screen
 
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val bookViewModel = BookViewModel()
-                    Screen(bookViewModel)
+                    HomeScreen()
                 }
             }
         }

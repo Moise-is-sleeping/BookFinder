@@ -28,7 +28,7 @@ fun Screen(bookViewModel: BookViewModel){
             items(list){
                 item ->
                 Row (modifier = Modifier){
-                    Text(text = item!!.title)
+                    Text(text = item!!.title.toString())
 /*                    Text(text =item.covers.toString() )*/
                     Text(text = item.description.toString())
                 }
