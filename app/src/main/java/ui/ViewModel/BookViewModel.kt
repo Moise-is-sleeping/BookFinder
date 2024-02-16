@@ -1,13 +1,11 @@
-package ui
+package ui.ViewModel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import data.BookApiService
-import data.BookRepository
+import data.Models.Book
+import data.Util.BookApiService
+import data.Util.BookRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,15 +18,21 @@ class BookViewModel: ViewModel() {
 
     private var bookApiService = BookApiService()
     private var bookRepository = BookRepository(bookApiService)
-    var json by mutableStateOf("")
-
-    private var  _list = MutableStateFlow<List<String>>(emptyList())
-    var list: StateFlow<List<String>> = _list.asStateFlow()
 
 
-    fun getBooks(id:String){
+    private var  _bookList = MutableStateFlow<List<Book?>>(emptyList())
+    var bookList: StateFlow<List<Book?>> = _bookList.asStateFlow()
+
+
+
+    fun getBooks(ids: MutableList<String>){
         viewModelScope.launch(Dispatchers.IO) {
-            val book = bookApiService.getBook(id)
+            val tempList = mutableListOf<Book?>()
+            for (id in ids){
+                val book = bookApiService.getBook(id).body()
+                tempList.add(book)
+            }
+            _bookList.value = tempList
 
         }
     }
@@ -42,20 +46,14 @@ class BookViewModel: ViewModel() {
                 val id = doc.key.substring(7)
                 tempList.add(id)
             }
-            _list.value = tempList
-//            getAllBooks(_list)
+            getBooks(tempList)
         }
     }
-    fun getAllBooks(books: MutableStateFlow<List<String>>){
-        for (i in 0..20){
-            try {
-                getBooks("OL1718419W")
-            }catch (e:Exception){
 
-            }
-
-        }
+    fun clear(){
+        _bookList.value = emptyList()
     }
+
 
 
 

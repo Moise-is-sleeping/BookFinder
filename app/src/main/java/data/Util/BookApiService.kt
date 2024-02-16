@@ -1,10 +1,7 @@
-package data
+package data.Util
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.json.Json
-import okhttp3.Interceptor
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
+import data.Models.Book
+import data.Models.Search
 import retrofit2.Response
 
 import retrofit2.Retrofit
@@ -12,14 +9,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.Url
 
 interface RetrofitApi{
     @GET("works/{id}.json/")
     suspend fun getBooksApi(@Path(value ="id")id:String): Response<Book>
 
     @GET("search.json")
-    suspend fun searchBooksApi(@Query("q")search:String,@Query("mode")mode:String="everything"):Response<Search>
+    suspend fun searchBooksApi(@Query("q")search:String,@Query("mode")mode:String="everything",@Query("limit")limit:String="10"):Response<Search>
 }
 
 
