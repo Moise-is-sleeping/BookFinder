@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
-data class Search(
+data class SearchByName(
     val docs: List<Doc>,
     @SerialName("num_found") val numFound: Int,
 )

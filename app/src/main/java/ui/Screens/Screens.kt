@@ -44,10 +44,10 @@ fun Screen(bookViewModel: BookViewModel){
 
         }
 
-        AsyncImage(model ="https://ia600607.us.archive.org/view_archive.php?archive=/22/items/olcovers24/olcovers24-L.zip&file=240727-L.jpg" , contentDescription ="test" )
+        AsyncImage(model ="https://ia800505.us.archive.org/view_archive.php?archive=/25/items/m_covers_0010/m_covers_0010_97.zip&file=0010977514-l.jpg" , contentDescription ="test" )
         TextField(value = text, onValueChange ={text = it} )
         Button(onClick = {
-            bookViewModel.searchBooks(text)
+            bookViewModel.searchBooksByName(text)
         }) {
 
         }
