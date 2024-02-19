@@ -5,6 +5,7 @@ plugins {
     id("com.google.relay") version "0.3.10"
 
 
+
 }
 
 android {
@@ -87,6 +88,9 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.11.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("io.coil-kt:coil-compose:2.4.0")
+
+    implementation ("androidx.compose.material:material-icons-core:1.1.0-alpha03")
+    implementation ("androidx.compose.material:material-icons-extended:1.1.0-alpha03")
 
 
 }

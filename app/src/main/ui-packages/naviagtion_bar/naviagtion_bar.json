@@ -1,0 +1,885 @@
+{
+  "name": "naviagtion_bar",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "1Wdswe7lGrQnpNLE54B7NS",
+    "node": "37:96",
+    "version": "5180938396",
+    "component-id": "d993c35bd372483e054f8e166b16f89b35b22c95"
+  },
+  "default": "Property 1=Default",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "group",
+        "id": "Naviagtion Bar/HomeButton"
+      },
+      {
+        "type": "group",
+        "id": "SearchButton"
+      },
+      {
+        "type": "group",
+        "id": "HomeButton"
+      },
+      {
+        "type": "image",
+        "id": "homeButton"
+      },
+      {
+        "type": "text",
+        "id": "Home"
+      },
+      {
+        "type": "vector",
+        "id": "homeButton1"
+      },
+      {
+        "type": "text",
+        "id": "Search"
+      },
+      {
+        "type": "image",
+        "id": "searchButton"
+      },
+      {
+        "type": "image",
+        "id": "savedButton"
+      },
+      {
+        "type": "text",
+        "id": "Saved"
+      },
+      {
+        "type": "vector",
+        "id": "homeButton2"
+      },
+      {
+        "type": "vector",
+        "id": "homeButton3"
+      }
+    ],
+    "modes": {
+      "Property 1=Default": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "26.0",
+              "top": "8.0",
+              "right": "26.0",
+              "bottom": "8.0"
+            },
+            "arrangement": "row",
+            "main-axis-align": "space-between",
+            "children": [
+              "Naviagtion Bar/HomeButton",
+              "SearchButton",
+              "HomeButton"
+            ],
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "50.84745762711865",
+              "saturation": "0.23505976095617526",
+              "value": "0.984313725490196"
+            }
+          },
+          {
+            "id": "Naviagtion Bar/HomeButton",
+            "tap-handler": "$homeButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "51.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "homeButton",
+              "Home"
+            ]
+          },
+          {
+            "id": "SearchButton",
+            "tap-handler": "$ searchButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "51.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "homeButton1",
+              "Search",
+              "searchButton"
+            ]
+          },
+          {
+            "id": "HomeButton",
+            "tap-handler": "$savedButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "51.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "savedButton",
+              "Saved"
+            ]
+          },
+          {
+            "id": "homeButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              }
+            },
+            "image-content": "home_button.png",
+            "scale": "cover"
+          },
+          {
+            "id": "Home",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "38.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "13.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "30.000000000000007",
+              "saturation": "0.4166666666666667",
+              "value": "0.2823529411764706"
+            },
+            "text-content": "Home",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "line-height": "1.347900390625",
+            "typeface": "Linden Hill"
+          },
+          {
+            "id": "homeButton1",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "4.0",
+              "offset-x": "0.0",
+              "offset-y": "4.0",
+              "spread": "0.0",
+              "blend-mode": "normal"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              }
+            }
+          },
+          {
+            "id": "Search",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "38.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "13.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "30.000000000000007",
+              "saturation": "0.4166666666666667",
+              "value": "0.2823529411764706"
+            },
+            "text-content": "Search",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "line-height": "1.347900390625",
+            "typeface": "Linden Hill"
+          },
+          {
+            "id": "searchButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              }
+            },
+            "image-content": "search_button.png",
+            "scale": "cover"
+          },
+          {
+            "id": "savedButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              }
+            },
+            "image-content": "saved_button.png",
+            "scale": "cover"
+          },
+          {
+            "id": "Saved",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "38.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "13.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "30.000000000000007",
+              "saturation": "0.4166666666666667",
+              "value": "0.2823529411764706"
+            },
+            "text-content": "Saved",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "line-height": "1.347900390625",
+            "typeface": "Linden Hill"
+          }
+        ]
+      },
+      "Property 1=Variant2": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "26.0",
+              "top": "8.0",
+              "right": "26.0",
+              "bottom": "8.0"
+            },
+            "arrangement": "row",
+            "main-axis-align": "space-between",
+            "children": [
+              "Naviagtion Bar/HomeButton",
+              "SearchButton",
+              "HomeButton"
+            ],
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "50.84745762711865",
+              "saturation": "0.23505976095617526",
+              "value": "0.984313725490196"
+            }
+          },
+          {
+            "id": "Naviagtion Bar/HomeButton",
+            "tap-handler": "$homeButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "51.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "homeButton",
+              "Home"
+            ]
+          },
+          {
+            "id": "SearchButton",
+            "tap-handler": "$ searchButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "51.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "homeButton2",
+              "Search",
+              "searchButton"
+            ]
+          },
+          {
+            "id": "HomeButton",
+            "tap-handler": "$savedButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "51.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "savedButton",
+              "Saved"
+            ]
+          },
+          {
+            "id": "homeButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              }
+            },
+            "image-content": "home_button.png",
+            "scale": "cover"
+          },
+          {
+            "id": "Home",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "38.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "13.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "30.000000000000007",
+              "saturation": "0.4166666666666667",
+              "value": "0.2823529411764706"
+            },
+            "text-content": "Home",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "line-height": "1.347900390625",
+            "typeface": "Linden Hill"
+          },
+          {
+            "id": "homeButton2",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "4.0",
+              "offset-x": "0.0",
+              "offset-y": "4.0",
+              "spread": "0.0",
+              "blend-mode": "normal"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              }
+            }
+          },
+          {
+            "id": "Search",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "38.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "13.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "30.000000000000007",
+              "saturation": "0.4166666666666667",
+              "value": "0.2823529411764706"
+            },
+            "text-content": "Search",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "line-height": "1.347900390625",
+            "typeface": "Linden Hill"
+          },
+          {
+            "id": "searchButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              }
+            },
+            "image-content": "search_button.png",
+            "scale": "cover"
+          },
+          {
+            "id": "savedButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              }
+            },
+            "image-content": "saved_button.png",
+            "scale": "cover"
+          },
+          {
+            "id": "Saved",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "38.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "13.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "30.000000000000007",
+              "saturation": "0.4166666666666667",
+              "value": "0.2823529411764706"
+            },
+            "text-content": "Saved",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "line-height": "1.347900390625",
+            "typeface": "Linden Hill"
+          }
+        ]
+      },
+      "Property 1=Variant3": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "26.0",
+              "top": "8.0",
+              "right": "26.0",
+              "bottom": "8.0"
+            },
+            "arrangement": "row",
+            "main-axis-align": "space-between",
+            "children": [
+              "Naviagtion Bar/HomeButton",
+              "SearchButton",
+              "HomeButton"
+            ],
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "50.84745762711865",
+              "saturation": "0.23505976095617526",
+              "value": "0.984313725490196"
+            }
+          },
+          {
+            "id": "Naviagtion Bar/HomeButton",
+            "tap-handler": "$homeButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "51.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "homeButton",
+              "Home"
+            ]
+          },
+          {
+            "id": "SearchButton",
+            "tap-handler": "$ searchButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "51.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "homeButton3",
+              "Search",
+              "searchButton"
+            ]
+          },
+          {
+            "id": "HomeButton",
+            "tap-handler": "$savedButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "51.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "savedButton",
+              "Saved"
+            ]
+          },
+          {
+            "id": "homeButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              }
+            },
+            "image-content": "home_button.png",
+            "scale": "cover"
+          },
+          {
+            "id": "Home",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "38.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "13.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "30.000000000000007",
+              "saturation": "0.4166666666666667",
+              "value": "0.2823529411764706"
+            },
+            "text-content": "Home",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "line-height": "1.347900390625",
+            "typeface": "Linden Hill"
+          },
+          {
+            "id": "homeButton3",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "4.0",
+              "offset-x": "0.0",
+              "offset-y": "4.0",
+              "spread": "0.0",
+              "blend-mode": "normal"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              }
+            }
+          },
+          {
+            "id": "Search",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "38.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "13.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "30.000000000000007",
+              "saturation": "0.4166666666666667",
+              "value": "0.2823529411764706"
+            },
+            "text-content": "Search",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "line-height": "1.347900390625",
+            "typeface": "Linden Hill"
+          },
+          {
+            "id": "searchButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              }
+            },
+            "image-content": "search_button.png",
+            "scale": "cover"
+          },
+          {
+            "id": "savedButton",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              }
+            },
+            "image-content": "saved_button.png",
+            "scale": "cover"
+          },
+          {
+            "id": "Saved",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "38.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "38.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "13.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "30.000000000000007",
+              "saturation": "0.4166666666666667",
+              "value": "0.2823529411764706"
+            },
+            "text-content": "Saved",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "line-height": "1.347900390625",
+            "typeface": "Linden Hill"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "homeButton": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    },
+    " searchButton": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    },
+    "savedButton": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "Property 1=Default",
+      "size": {
+        "width": 360.0,
+        "height": 69.0
+      }
+    },
+    {
+      "design": "Property 1=Variant2",
+      "size": {
+        "width": 360.0,
+        "height": 69.0
+      }
+    },
+    {
+      "design": "Property 1=Variant3",
+      "size": {
+        "width": 360.0,
+        "height": 69.0
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

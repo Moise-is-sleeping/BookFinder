@@ -80,7 +80,6 @@ class BookViewModel: ViewModel() {
         }
     }
 
-
     fun getRatings(id:String){
         viewModelScope.launch(Dispatchers.IO) {
                 val result = bookRepository.getRatings(id)
@@ -89,8 +88,9 @@ class BookViewModel: ViewModel() {
             _ratingList.value = tempList2
         }
     }
+
     init {
-        searchBooksBySubject("horror")
+        searchBooksBySubject("fantasy")
     }
 
     fun clear(){

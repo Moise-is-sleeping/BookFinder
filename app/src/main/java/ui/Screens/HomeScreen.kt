@@ -66,10 +66,6 @@ fun HomeScreen(bookViewModel: BookViewModel){
             Loading()
             Log.d("ratinglist size 1",(ratingList.size.toString()))
         }
-        if (ratingList.size==60){
-            Log.d("ratinglist size 1 if",(ratingList.size.toString()))
-        }
-
 
         LazyColumn(modifier= Modifier
             .fillMaxWidth()
@@ -129,7 +125,8 @@ fun HomescreenBooks(modifier: Modifier = Modifier, title: String = "", author: S
                 )
             )
         ) {
-            AsyncImage(model ="https://covers.openlibrary.org/b/id/$picId-M.jpg" , contentDescription ="test" ,modifier=Modifier.fillMaxSize())}
+            AsyncImage(model ="https://covers.openlibrary.org/b/id/$picId-M.jpg" , contentDescription ="test" ,modifier=Modifier.fillMaxSize())
+        }
         BookTitle(
             title = title,
             modifier = Modifier.boxAlign(
