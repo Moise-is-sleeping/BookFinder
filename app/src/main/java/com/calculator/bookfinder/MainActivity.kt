@@ -16,7 +16,7 @@ import ui.Screens.HomeScreen
 import ui.Screens.LoginScreen
 import ui.ViewModel.BookViewModel
 import ui.Screens.Screen
-
+import ui.ViewModel.LoginViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -30,7 +30,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val bookViewModel = BookViewModel()
-                    LoginScreen()
+                    val loginViewModel = LoginViewModel()
+                    LoginScreen(loginViewModel)
                 }
             }
         }

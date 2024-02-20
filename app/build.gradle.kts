@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
     id("com.google.relay") version "0.3.10"
+    id("com.google.gms.google-services")
 
 
 
@@ -70,6 +71,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
@@ -91,6 +93,16 @@ dependencies {
 
     implementation ("androidx.compose.material:material-icons-core:1.1.0-alpha03")
     implementation ("androidx.compose.material:material-icons-extended:1.1.0-alpha03")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
+
+    // TODO: Add the dependencies for Firebase products you want to use
+    // When using the BoM, don't specify versions in Firebase dependencies
+    // https://firebase.google.com/docs/android/setup#available-libraries
+    // DCS - Servicio de Autenticación
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
+    // DCS - Base de datos Firestore
+    implementation("com.google.firebase:firebase-firestore-ktx:24.10.1")
 
 
 }
