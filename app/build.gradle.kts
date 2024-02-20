@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.calculator.bookfinder"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.calculator.bookfinder"
@@ -103,6 +103,9 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
     // DCS - Base de datos Firestore
     implementation("com.google.firebase:firebase-firestore-ktx:24.10.1")
+
+    implementation("androidx.navigation:navigation-compose:2.7.5")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.7.5")
 
 
 }

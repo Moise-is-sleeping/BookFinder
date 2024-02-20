@@ -14,6 +14,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 
 import com.google.firebase.ktx.Firebase
+import data.Models.Works
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -21,6 +25,9 @@ import java.lang.Exception
 class LoginViewModel:ViewModel(){
     private val auth:FirebaseAuth= Firebase.auth
     private val firestore = Firebase.firestore
+
+    private var  _wrongInfo = MutableStateFlow<Boolean>(false)
+    var wrongInfo: StateFlow<Boolean> = _wrongInfo.asStateFlow()
 
     var showAlert by mutableStateOf(false)
         private set
@@ -40,6 +47,7 @@ class LoginViewModel:ViewModel(){
                         if (task.isSuccessful) {
                             onSuccess()
                         } else {
+                            _wrongInfo.value = true
                             Log.d("ERROR EN FIREBASE","Usuario y/o contrasena incorrectos")
                             showAlert = true
                         }
@@ -48,6 +56,10 @@ class LoginViewModel:ViewModel(){
                 Log.d("ERROR EN JETPACK", "ERROR: ${e.localizedMessage}")
             }
         }
+    }
+
+    fun changeError(){
+        _wrongInfo.value = false
     }
 
     fun changeEmail(email: String) {

@@ -1,6 +1,5 @@
 package ui.Screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,10 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -20,13 +17,11 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults.textFieldColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,31 +39,31 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.calculator.bookfinder.accountbuttons.AccountButtons
-import com.calculator.bookfinder.header.lancelot
+import com.calculator.bookfinder.accountbuttons.lindenHill
+import com.calculator.bookfinder.registerlink.RegisterLink
 import com.calculator.bookfinder.rememberme.Ellipse1Property1Default
 import com.calculator.bookfinder.rememberme.Ellipse1Property1Variant2
 import com.calculator.bookfinder.rememberme.Ellipse2Property1Default
 import com.calculator.bookfinder.rememberme.Property1
-import com.calculator.bookfinder.rememberme.RememberMe
 import com.calculator.bookfinder.rememberme.RememeberMeProperty1Default
 import com.calculator.bookfinder.rememberme.RememeberMeProperty1Variant2
 import com.calculator.bookfinder.rememberme.TopLevelProperty1Default
 import com.calculator.bookfinder.rememberme.TopLevelProperty1Variant2
 import com.calculator.bookfinder.signinemail.Email
 import com.calculator.bookfinder.signinemail.EmailIcon
-import com.calculator.bookfinder.signinemail.SignInEmail
 import com.calculator.bookfinder.signinemail.TopLevel
 import com.calculator.bookfinder.signinpassword.PasswordIcon
-import com.calculator.bookfinder.signinpassword.SignInPassword
 import com.google.relay.compose.BoxScopeInstance.boxAlign
 import com.google.relay.compose.BoxScopeInstance.columnWeight
 import com.google.relay.compose.BoxScopeInstance.rowWeight
+import data.Routes.Routes
 import ui.ViewModel.LoginViewModel
 
 
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel){
+fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
     var state by remember { mutableStateOf(true) }
     Column(
         modifier = Modifier
@@ -77,7 +72,7 @@ fun LoginScreen(loginViewModel: LoginViewModel){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(text = "Sign In", fontFamily = lancelot, fontSize = 50.sp,
+        Text(text = "Sign In", fontFamily = lindenHill, fontSize = 50.sp,
             color = Color(
             alpha = 255,
             red = 0,
@@ -123,7 +118,7 @@ fun LoginScreen(loginViewModel: LoginViewModel){
             alignment = Alignment.TopStart,
             offset = DpOffset(
                 x = -100.dp,
-                y = 310.0.dp
+                y = 325.0.dp
                 )
             )
         )
@@ -152,11 +147,15 @@ fun LoginScreen(loginViewModel: LoginViewModel){
 
         AccountButtons(
             buttonPressed = {
-                            loginViewModel.login { Log.d("authentication","succes") }
+                            loginViewModel.login { navController.navigate(Routes.HomeScreen.route) }
             },
             buttonName = "   Login",
             property1 = com.calculator.bookfinder.accountbuttons.Property1.Default,
-            modifier = Modifier.rowWeight(1.0f).columnWeight(1.0f).height(75.dp).width(335.dp)
+            modifier = Modifier
+                .rowWeight(1.0f)
+                .columnWeight(1.0f)
+                .height(75.dp)
+                .width(335.dp)
                 .boxAlign(
                     alignment = Alignment.TopStart,
                     offset = DpOffset(
@@ -164,7 +163,26 @@ fun LoginScreen(loginViewModel: LoginViewModel){
                         y = 370.0.dp
                     )
                 )
-        )
+            )
+
+
+        RegisterLink(
+            registerButton = {
+                navController.navigate(Routes.RegisterScreen.route)
+            },
+            modifier = Modifier.rowWeight(1.0f)
+                .columnWeight(1.0f)
+                .height(39.dp).width(232.dp)
+                .boxAlign(
+                    alignment = Alignment.TopStart,
+                    offset = DpOffset(
+                        x = -50.dp,
+                        y = 400.0.dp
+                    )
+                )
+            )
+
+
 
 
     }
@@ -190,6 +208,7 @@ fun LoginScreen(loginViewModel: LoginViewModel){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel) {
+    val wrongInfoBool by loginViewModel.wrongInfo.collectAsState()
     var email by rememberSaveable { mutableStateOf("") }
     TopLevel(modifier = modifier) {
         EmailIcon(
@@ -217,7 +236,9 @@ fun EmailSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel) {
                     .background(color = Color.Transparent),
                 value = loginViewModel.email,
                 onValueChange = {
-                loginViewModel.changeEmail(it)   },
+                        loginViewModel.changeEmail(it)
+                        loginViewModel.changeError()
+                                },
                 placeholder = {
                     Text(text = "someone@gmail.com")
                 },
@@ -228,16 +249,18 @@ fun EmailSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel) {
                     focusedIndicatorColor = Color.Black,
                     unfocusedIndicatorColor = Color.Black
                 ),
-                singleLine = true
-
+                singleLine = true,
+                isError = wrongInfoBool
             )
         }
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel) {
+    val wrongInfoBool by loginViewModel.wrongInfo.collectAsState()
     var password by rememberSaveable { mutableStateOf("") }
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
     TopLevel(modifier = modifier) {
@@ -261,7 +284,10 @@ fun PasswordSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel
         ) {
             TextField(
                 value = loginViewModel.password,
-                onValueChange = { loginViewModel.changePassword(it) },
+                onValueChange = {
+                    loginViewModel.changePassword(it)
+                    loginViewModel.changeError()
+                                },
                 singleLine = true,
                 placeholder = { Text(text = "password") },
                 colors = textFieldColors(
@@ -283,7 +309,8 @@ fun PasswordSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel
                         Icon(imageVector = visibilityIcon, contentDescription = description)
                     }
 
-                }
+                },
+                isError = wrongInfoBool
 
             )
         }

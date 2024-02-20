@@ -10,10 +10,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.calculator.bookfinder.ui.theme.BookFinderTheme
+import data.Routes.Routes
 import ui.Screens.HomeScreen
 import ui.Screens.HomeScreen
 import ui.Screens.LoginScreen
+import ui.Screens.RegisterScreen
 import ui.ViewModel.BookViewModel
 import ui.Screens.Screen
 import ui.ViewModel.LoginViewModel
@@ -31,7 +36,19 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val bookViewModel = BookViewModel()
                     val loginViewModel = LoginViewModel()
-                    LoginScreen(loginViewModel)
+
+                    val navController = rememberNavController()
+                    NavHost(navController = navController , startDestination = Routes.LoginScreen.route ){
+                        composable(Routes.LoginScreen.route){
+                            LoginScreen(loginViewModel,navController)
+                        }
+                        composable(Routes.HomeScreen.route){
+                            HomeScreen(BookViewModel())
+                        }
+                        composable(Routes.RegisterScreen.route){
+                            RegisterScreen()
+                        }
+                    }
                 }
             }
         }
