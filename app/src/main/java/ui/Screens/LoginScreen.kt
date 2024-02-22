@@ -1,5 +1,6 @@
 package ui.Screens
 
+import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -98,7 +99,7 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
                     x = 0.dp,
                     y = 190.dp
                 )
-            ),loginViewModel)
+            ),loginViewModel,"Email")
         PasswordSection(modifier = Modifier
             .rowWeight(1.0f)
             .columnWeight(1.0f)
@@ -111,7 +112,7 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
                     y = 270.dp
                 )
             )
-            ,loginViewModel)
+            ,loginViewModel,"Password")
 
         Row(
             modifier = Modifier.boxAlign(
@@ -207,7 +208,7 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmailSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel) {
+fun EmailSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel,placeHolder:String) {
     val wrongInfoBool by loginViewModel.wrongInfo.collectAsState()
     var email by rememberSaveable { mutableStateOf("") }
     TopLevel(modifier = modifier) {
@@ -240,7 +241,7 @@ fun EmailSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel) {
                         loginViewModel.changeError()
                                 },
                 placeholder = {
-                    Text(text = "someone@gmail.com")
+                    Text(text = placeHolder,fontFamily = lindenHill,modifier = Modifier)
                 },
                 colors = textFieldColors(
                     focusedContainerColor = Color.Transparent,
@@ -259,7 +260,7 @@ fun EmailSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel) {
+fun PasswordSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel,placeholder:String) {
     val wrongInfoBool by loginViewModel.wrongInfo.collectAsState()
     var password by rememberSaveable { mutableStateOf("") }
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
@@ -289,7 +290,7 @@ fun PasswordSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel
                     loginViewModel.changeError()
                                 },
                 singleLine = true,
-                placeholder = { Text(text = "password") },
+                placeholder = { Text(text = placeholder,fontFamily = lindenHill) },
                 colors = textFieldColors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,

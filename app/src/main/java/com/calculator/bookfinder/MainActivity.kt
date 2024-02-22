@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                             HomeScreen(BookViewModel())
                         }
                         composable(Routes.RegisterScreen.route){
-                            RegisterScreen()
+                            RegisterScreen(loginViewModel,navController)
                         }
                     }
                 }

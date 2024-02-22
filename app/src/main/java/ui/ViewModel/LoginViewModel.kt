@@ -58,6 +58,8 @@ class LoginViewModel:ViewModel(){
         }
     }
 
+
+
     fun changeError(){
         _wrongInfo.value = false
     }
