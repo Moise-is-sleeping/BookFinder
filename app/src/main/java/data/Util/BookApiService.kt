@@ -1,5 +1,7 @@
 package data.Util
 
+import com.google.gson.GsonBuilder
+import data.Models.Author
 import data.Models.Book
 import data.Models.Ratings
 import data.Models.SearchByName
@@ -22,8 +24,11 @@ interface RetrofitApi{
     @GET("https://openlibrary.org/works/{id}/ratings.json")
     suspend fun getRatings(@Path(value = "id")id:String):Response<Ratings>
 
+    @GET("/authors/{id}.json")
+    suspend fun getAuthor(@Path(value = "id")id:String):Response<Author>
+
     @GET("search.json")
-    suspend fun searchBooksbyNameApi(@Query("q")search:String, @Query("mode")mode:String="everything", @Query("limit")limit:String="5"):Response<SearchByName>
+    suspend fun searchBooksbyNameApi(@Query("title")search:String, @Query("mode")mode:String="everything", @Query("limit")limit:String="20"):Response<SearchByName>
 }
 
 
@@ -31,10 +36,13 @@ interface RetrofitApi{
 
 class BookApiService() {
 
+    private val gson = GsonBuilder()
+        .setLenient()
+        .create()
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://openlibrary.org/")
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
     suspend fun getBook(id :String) : Response<Book>{
@@ -42,6 +50,10 @@ class BookApiService() {
     }
     suspend fun getRatings(id :String) : Response<Ratings>{
         return retrofit.create(RetrofitApi::class.java).getRatings(id)
+    }
+
+    suspend fun getAuthor(id :String) : Response<Author>{
+        return retrofit.create(RetrofitApi::class.java).getAuthor(id)
     }
 
     suspend fun searchBooksBySubject(subject:String):Response<SearchBySubject>{

@@ -2,6 +2,7 @@ package ui.Screens
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.calculator.bookfinder.header.Header
 import com.calculator.bookfinder.header.lancelot
@@ -36,16 +38,19 @@ import com.calculator.bookfinder.homepagebooks.BookTitle
 import com.calculator.bookfinder.homepagebooks.Books
 import com.calculator.bookfinder.homepagebooks.ByAuthor
 import com.calculator.bookfinder.naviagtionbar.NaviagtionBar
+
 import com.calculator.bookfinder.ratings.Property1
 import com.calculator.bookfinder.ratings.Ratings
 
 import com.google.relay.compose.BoxScopeInstance.columnWeight
 import com.google.relay.compose.BoxScopeInstance.rowWeight
+import data.Routes.Routes
+import ui.ViewModel.BookDatabaseViewModel
 import ui.ViewModel.BookViewModel
 
 
 @Composable
-fun HomeScreen(bookViewModel: BookViewModel){
+fun HomeScreen(bookViewModel: BookViewModel,navController:NavController,bookDatabaseViewModel: BookDatabaseViewModel){
     val list by bookViewModel.homeBookList.collectAsState()
     val ratingList by bookViewModel.ratingList.collectAsState()
 
@@ -63,7 +68,7 @@ fun HomeScreen(bookViewModel: BookViewModel){
             blue = 0
         ), modifier = Modifier.padding(15.dp))
         if (list.isEmpty()){
-            Loading()
+            Loading(120,90)
             Log.d("ratinglist size 1",(ratingList.size.toString()))
         }
 
@@ -81,25 +86,27 @@ fun HomeScreen(bookViewModel: BookViewModel){
                                 .columnWeight(1.0f)
                                 .height(225.dp)
                                 .width(390.dp)
-                                .padding(top = 15.dp, bottom = 15.dp),
+                                .padding(top = 15.dp, bottom = 15.dp)
+                                .clickable {
+                                    bookViewModel.getBooks(book.key.substring(7))
+                                    navController.navigate(Routes.BookDescriptionScreen.route)
+                                    bookDatabaseViewModel.hasSavedDefaultValue(book.key.substring(7))
+                                },
                             rating = ratingloader(ratingList,list.indexOf(book)) )
 
 
 
                 }
             }
-
         NaviagtionBar(
             homeButton = {},
-            searchButton = {},
+            searchButton = { navController.navigate(Routes.SearchScreen.route)},
             savedButton = {},
-            property1 = com.calculator.bookfinder.naviagtionbar.Property1.Default,
             modifier = Modifier
                 .rowWeight(1.0f)
                 .columnWeight(1.0f)
                 .fillMaxWidth()
         )
-
         }
 
 }
@@ -177,16 +184,18 @@ fun RatingsDecider(rating :Float): Property1 {
         return Property1.Default
     }
 }
-@Preview
+
 @Composable
-fun Loading(){
+fun Loading(height:Int,width :Int){
     Row (modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center){
         CircularProgressIndicator(modifier = Modifier
-            .height(120.dp)
-            .width(90.dp))
+            .height(height.dp)
+            .width(width.dp))
     }
 
 }
+
+
 
 

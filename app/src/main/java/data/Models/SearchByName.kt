@@ -12,4 +12,6 @@ data class SearchByName(
 @Serializable
 data class Doc(
     val key: String,
+    val title :String,
+    val first_publish_year :String
 )

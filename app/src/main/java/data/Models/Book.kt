@@ -2,15 +2,17 @@ package data.Models
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import ui.state.BookState
 
-@Serializable
+
 data class Book(
-    val title: String,
-    val covers: List<Int>?,
-    val subjects: List<String>?,
-    val links: List<Link>?,
-    val type: Type?,
-    @Contextual val description: Any?,
+    val title: String? = BookState.DEFAUTL_TITLE,
+    val covers: List<Int>? = mutableListOf(0),
+    val subjects: List<String>? = emptyList(),
+    val links: List<Link>? = emptyList(),
+    val type: Type? = Type(""),
+    @Contextual val description: Any? = "",
+    @Contextual  var authors:Any = "",
 )
 
 
@@ -26,13 +28,5 @@ data class Type(
     val key: String
 )
 
-@Serializable
-data class AuthorInfo(
-    val author: Author,
-    val type: Type
-)
 
-@Serializable
-data class Author(
-    val key: String
-)
+

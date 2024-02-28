@@ -14,7 +14,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 
 import com.google.firebase.ktx.Firebase
-import data.Models.Works
+import data.Models.User
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,13 +30,12 @@ class LoginViewModel:ViewModel(){
     private var  _wrongInfo = MutableStateFlow<Boolean>(false)
     var wrongInfo: StateFlow<Boolean> = _wrongInfo.asStateFlow()
 
-    var showAlert by mutableStateOf(false)
-        private set
+
     var email by mutableStateOf("")
         private set
     var password by mutableStateOf("")
         private set
-    var userName by mutableStateOf("")
+    var repeatPassword by mutableStateOf("")
         private set
 
 
@@ -49,12 +49,55 @@ class LoginViewModel:ViewModel(){
                         } else {
                             _wrongInfo.value = true
                             Log.d("ERROR EN FIREBASE","Usuario y/o contrasena incorrectos")
-                            showAlert = true
                         }
                     }
             } catch (e: Exception){
                 Log.d("ERROR EN JETPACK", "ERROR: ${e.localizedMessage}")
             }
+        }
+    }
+
+
+    fun createUser(onSuccess: () -> Unit){
+        viewModelScope.launch {
+            if (password == repeatPassword){
+                try {
+                    // DCS - Utiliza el servicio de autenticación de Firebase para registrar al usuario
+                    // por email y contraseña
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                // DCS - Si se realiza con éxito, almacenamos el usuario en la colección "Users"
+                                saveUser()
+                                onSuccess()
+                            } else {
+                                Log.d("ERROR EN FIREBASE","Error al crear usuario")
+                                _wrongInfo.value = true
+                            }
+                        }
+                } catch (e: Exception){
+                    Log.d("ERROR CREAR USUARIO", "ERROR: ${e.localizedMessage}")
+                }
+            }
+            else{
+                _wrongInfo.value = true
+            }
+        }
+    }
+
+    private fun saveUser(){
+        val id = auth.currentUser?.uid
+        val email = auth.currentUser?.email
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = User(
+                userId = id.toString(),
+                email = email.toString(),
+            )
+            // DCS - Añade el usuario a la colección "Users" en la base de datos Firestore
+            firestore.collection("Users")
+                .add(user)
+                .addOnSuccessListener { Log.d("GUARDAR OK", "Se guardó el usuario correctamente en Firestore") }
+                .addOnFailureListener { Log.d("ERROR AL GUARDAR", "ERROR al guardar en Firestore") }
         }
     }
 
@@ -71,5 +114,10 @@ class LoginViewModel:ViewModel(){
     fun changePassword(password: String) {
         this.password = password
     }
+
+    fun changeRepeatPassword(password: String) {
+        this.repeatPassword = password
+    }
+
 
 }

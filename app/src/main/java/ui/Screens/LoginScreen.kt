@@ -1,10 +1,11 @@
 package ui.Screens
 
-import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -73,66 +74,43 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+        Spacer(modifier = Modifier.fillMaxHeight(0.15f))
         Text(text = "Sign In", fontFamily = lindenHill, fontSize = 50.sp,
             color = Color(
             alpha = 255,
             red = 0,
             green = 0,
             blue = 0
-        ), modifier = Modifier
-            .boxAlign(
-                alignment = Alignment.TopStart,
-                offset = DpOffset(
-                    x = 0.dp,
-                    y = 110.dp
-                 )
             )
         )
+        Spacer(modifier = Modifier.fillMaxHeight(0.1f))
         EmailSection(modifier = Modifier
             .rowWeight(1.0f)
             .columnWeight(1.0f)
             .width(335.dp)
-            .height(75.dp)
-            .boxAlign(
-                alignment = Alignment.TopStart,
-                offset = DpOffset(
-                    x = 0.dp,
-                    y = 190.dp
-                )
-            ),loginViewModel,"Email")
-        PasswordSection(modifier = Modifier
+            .height(75.dp),
+            loginViewModel,"Email")
+
+        Spacer(modifier = Modifier.fillMaxHeight(0.15f))
+        SignInPasswordSection(modifier = Modifier
             .rowWeight(1.0f)
             .columnWeight(1.0f)
             .width(335.dp)
             .height(75.dp)
-            .boxAlign(
-                alignment = Alignment.TopStart,
-                offset = DpOffset(
-                    x = 0.dp,
-                    y = 270.dp
-                )
-            )
             ,loginViewModel,"Password")
-
-        Row(
-            modifier = Modifier.boxAlign(
-            alignment = Alignment.TopStart,
-            offset = DpOffset(
-                x = -100.dp,
-                y = 325.0.dp
-                )
-            )
+        Spacer(modifier = Modifier.fillMaxHeight(0.07f))
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
         )
         {
+            Spacer(modifier = Modifier.fillMaxWidth(0.07f))
             RadioButton(
                 selected = state,
                 onClick = { state = !state },
-                modifier = Modifier.semantics { contentDescription = "Localized Description" },
                 colors = RadioButtonDefaults.colors(
                     selectedColor = Color(0xFFFBF2C0),
                     unselectedColor= Color(0xFFFFFFFF)
                 )
-
             )
             RememeberMeProperty1Default(
                 modifier = Modifier.boxAlign(
@@ -144,8 +122,7 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
                 )
             )
         }
-
-
+        Spacer(modifier = Modifier.fillMaxHeight(0.25f))
         AccountButtons(
             buttonPressed = {
                             loginViewModel.login { navController.navigate(Routes.HomeScreen.route) }
@@ -157,31 +134,21 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
                 .columnWeight(1.0f)
                 .height(75.dp)
                 .width(335.dp)
-                .boxAlign(
-                    alignment = Alignment.TopStart,
-                    offset = DpOffset(
-                        x = 0.dp,
-                        y = 370.0.dp
-                    )
-                )
             )
-
-
-        RegisterLink(
-            registerButton = {
-                navController.navigate(Routes.RegisterScreen.route)
-            },
-            modifier = Modifier.rowWeight(1.0f)
-                .columnWeight(1.0f)
-                .height(39.dp).width(232.dp)
-                .boxAlign(
-                    alignment = Alignment.TopStart,
-                    offset = DpOffset(
-                        x = -50.dp,
-                        y = 400.0.dp
-                    )
-                )
+        Spacer(modifier = Modifier.fillMaxHeight(0.35f))
+        Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Spacer(modifier = Modifier.fillMaxWidth(0.1f))
+            RegisterLink(
+                registerButton = {
+                    navController.navigate(Routes.RegisterScreen.route)
+                },
+                modifier = Modifier.rowWeight(1.0f)
+                    .columnWeight(1.0f)
+                    .height(39.dp).width(232.dp)
             )
+        }
 
 
 
@@ -260,7 +227,7 @@ fun EmailSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel,pl
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel,placeholder:String) {
+fun SignInPasswordSection(modifier: Modifier = Modifier, loginViewModel: LoginViewModel, placeholder:String) {
     val wrongInfoBool by loginViewModel.wrongInfo.collectAsState()
     var password by rememberSaveable { mutableStateOf("") }
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
@@ -305,7 +272,6 @@ fun PasswordSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel
                     IconButton(onClick = { passwordHidden = !passwordHidden }) {
                         val visibilityIcon =
                             if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                        // Please provide localized description for accessibility services
                         val description = if (passwordHidden) "Show password" else "Hide password"
                         Icon(imageVector = visibilityIcon, contentDescription = description)
                     }

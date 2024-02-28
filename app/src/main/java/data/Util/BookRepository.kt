@@ -1,11 +1,13 @@
 package data.Util
 
 import android.util.Log
+import data.Models.Author
 import data.Models.Book
 import data.Models.Ratings
 import data.Models.SearchByName
 import data.Models.SearchBySubject
 import retrofit2.Response
+import ui.state.AuthorState
 import ui.state.BookState
 import ui.state.RatingsState
 import ui.state.SearchByNameState
@@ -23,25 +25,21 @@ class BookRepository(private val bookapi : BookApiService) {
         }
     }
 
+    suspend fun getAuthor(id:String): AuthorState {
+        val response = bookapi.getAuthor(id)
+        return if (response.isSuccessful){
+            response.body()?.toAuthorState()?:AuthorState()
+        }
+        else{
+            AuthorState()
+        }
+    }
+
 
     suspend fun searchBySubjectState(subject:String): SearchBySubjectState {
-        /*var bothResults = mutableListOf<Any>()*/
         val response1 = bookapi.searchBooksBySubject(subject)
-/*        val ratingsList = mutableListOf<Float>()*/
         if (response1.isSuccessful){
-            return response1.body()?.toSearchBySubjectState()?:SearchBySubjectState()
-/*            val doc = response1.body()!!.works
-            var counter = 0
-            while (counter  < doc.size){
-                val response2 = bookapi.getRatings(doc[counter].key.substring(7))
-                if(response2.isSuccessful){
-                    Log.d("repository",response2.body()!!.summary.average.toString())
-                    ratingsList.add(response2.body()!!.summary.average)
-                    counter+=1
-                }
-            }
-            bothResults.add(ratingsList)
-        }*/}
+            return response1.body()?.toSearchBySubjectState()?:SearchBySubjectState() }
         else{
                 return SearchBySubjectState()
         }
@@ -67,7 +65,11 @@ class BookRepository(private val bookapi : BookApiService) {
         }
     }
 
-
+    private fun Author.toAuthorState():AuthorState{
+        return AuthorState(
+            name = this.name
+        )
+    }
     private fun Ratings.toRatingsSate(): RatingsState {
         return RatingsState(
             summary = this.summary
@@ -95,7 +97,8 @@ class BookRepository(private val bookapi : BookApiService) {
             subjects = this.subjects,
             links = this.links,
             type = this.type,
-            description = this.description
+            description = this.description,
+            authors = this.authors
         )
     }
 }

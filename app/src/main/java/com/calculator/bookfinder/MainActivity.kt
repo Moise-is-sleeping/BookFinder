@@ -15,12 +15,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.calculator.bookfinder.ui.theme.BookFinderTheme
 import data.Routes.Routes
+import ui.Screens.BooKDescriptionScreen
 import ui.Screens.HomeScreen
 import ui.Screens.HomeScreen
 import ui.Screens.LoginScreen
 import ui.Screens.RegisterScreen
 import ui.ViewModel.BookViewModel
-import ui.Screens.Screen
+
+import ui.Screens.SearchScreen
+import ui.ViewModel.BookDatabaseViewModel
 import ui.ViewModel.LoginViewModel
 
 
@@ -36,17 +39,24 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val bookViewModel = BookViewModel()
                     val loginViewModel = LoginViewModel()
+                    val bookDatabaseViewModel = BookDatabaseViewModel()
 
                     val navController = rememberNavController()
-                    NavHost(navController = navController , startDestination = Routes.LoginScreen.route ){
+                    NavHost(navController = navController , startDestination = Routes.HomeScreen.route ){
                         composable(Routes.LoginScreen.route){
                             LoginScreen(loginViewModel,navController)
                         }
                         composable(Routes.HomeScreen.route){
-                            HomeScreen(BookViewModel())
+                            HomeScreen(bookViewModel,navController,bookDatabaseViewModel)
                         }
                         composable(Routes.RegisterScreen.route){
                             RegisterScreen(loginViewModel,navController)
+                        }
+                        composable(Routes.SearchScreen.route){
+                            SearchScreen(bookViewModel,navController)
+                        }
+                        composable(Routes.BookDescriptionScreen.route){
+                            BooKDescriptionScreen(bookDatabaseViewModel,bookViewModel, navController)
                         }
                     }
                 }
