@@ -20,6 +20,7 @@ import ui.Screens.HomeScreen
 import ui.Screens.HomeScreen
 import ui.Screens.LoginScreen
 import ui.Screens.RegisterScreen
+import ui.Screens.SavedScreen
 import ui.ViewModel.BookViewModel
 
 import ui.Screens.SearchScreen
@@ -42,7 +43,7 @@ class MainActivity : ComponentActivity() {
                     val bookDatabaseViewModel = BookDatabaseViewModel()
 
                     val navController = rememberNavController()
-                    NavHost(navController = navController , startDestination = Routes.HomeScreen.route ){
+                    NavHost(navController = navController , startDestination = Routes.LoginScreen.route ){
                         composable(Routes.LoginScreen.route){
                             LoginScreen(loginViewModel,navController)
                         }
@@ -53,10 +54,13 @@ class MainActivity : ComponentActivity() {
                             RegisterScreen(loginViewModel,navController)
                         }
                         composable(Routes.SearchScreen.route){
-                            SearchScreen(bookViewModel,navController)
+                            SearchScreen(bookDatabaseViewModel,bookViewModel,navController)
                         }
                         composable(Routes.BookDescriptionScreen.route){
                             BooKDescriptionScreen(bookDatabaseViewModel,bookViewModel, navController)
+                        }
+                        composable(Routes.SavedScreen.route){
+                            SavedScreen(bookDatabaseViewModel,bookViewModel, navController)
                         }
                     }
                 }

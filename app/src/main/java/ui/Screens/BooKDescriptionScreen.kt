@@ -48,10 +48,17 @@ import ui.ViewModel.BookDatabaseViewModel
 import ui.ViewModel.BookViewModel
 
 
+/**
+ * Function that displays the information about a book in a more detailed way
+ * @param bookDatabaseViewModel view-model that contains the logic behind certain functions in the screen
+ * @param bookViewModel view-model that contains the logic behind certain functions in the screen
+ * @param navController controller that allows navigation between screens
+ */
 @Composable
 fun BooKDescriptionScreen(bookDatabaseViewModel: BookDatabaseViewModel, bookViewModel: BookViewModel, navController: NavController) {
     val bookDetails by bookViewModel.bookDetails.collectAsState()
     val hasSaved by bookDatabaseViewModel.hasSaved.collectAsState()
+    //if the books title is not the default value it displays the information
     if (bookDetails.title!! != "none"){
         Column (
             modifier = Modifier
@@ -67,19 +74,13 @@ fun BooKDescriptionScreen(bookDatabaseViewModel: BookDatabaseViewModel, bookView
                         .clickable {
                             navController.popBackStack()
                             bookViewModel.resetHasCovers()
-                            if (hasSaved && bookDatabaseViewModel.check()){
-                                bookDatabaseViewModel.SaveBooks {
-                                }
-                            }
                             bookDatabaseViewModel.addIdOrRemove(hasSaved)
-
                         }
                         .height(39.dp)
                         .width(39.dp)
                 )
             }
             BookDetails( modifier = Modifier.height(400.dp), bookViewModel)
-            Log.d("HasSaved",hasSaved.toString())
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -89,6 +90,7 @@ fun BooKDescriptionScreen(bookDatabaseViewModel: BookDatabaseViewModel, bookView
                     addToFavourites = {
                         bookDatabaseViewModel.hasSaved()
                     },
+                    //the button variant is shown based on whether the user has saved the book or not
                     property1 = if (hasSaved) Property1.Variant2 else Property1.Default ,
                     modifier = Modifier
                         .rowWeight(1.0f)
@@ -115,16 +117,11 @@ fun BooKDescriptionScreen(bookDatabaseViewModel: BookDatabaseViewModel, bookView
 }
 
 
-
-
-
-
-
-
-
-
-
-
+/**
+ * function that displays details about the books
+ * @param modifier allows the visual modification of the function
+ * @param bookViewModel view-model that contains the logic behind certain functions in the screen
+ */
 @Composable
 fun BookDetails(
     modifier: Modifier = Modifier,
@@ -136,6 +133,7 @@ fun BookDetails(
 
 
     Row(modifier = Modifier.height(230.dp)) {
+        //depending on whether a cover id is received from the api, its show or a place holder is put
         if (hasCovers){
             Book(
                 imageButton = {},
@@ -157,11 +155,16 @@ fun BookDetails(
                     modifier = Modifier.padding(start = 10.dp, top = 5.dp)
                 )
                 AuthorName(bookViewModel)
+                
             }
         }
     }
 }
 
+/**
+ * Function that displays the name of the author
+ * @param bookViewModel view-model that contains the logic behind certain functions in the screen
+ */
 @Composable
 fun AuthorName(bookViewModel: BookViewModel){
     val author by bookViewModel.author.collectAsState()
@@ -179,6 +182,10 @@ fun AuthorName(bookViewModel: BookViewModel){
         )
 }
 
+/**
+ * Function that displays the book description
+ * @param bookViewModel view-model that contains the logic behind certain functions in the screen
+ */
 @Composable
 fun BookDescription( bookViewModel: BookViewModel){
     val bookDetails by bookViewModel.bookDetails.collectAsState()

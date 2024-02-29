@@ -19,13 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,7 +44,12 @@ import data.Routes.Routes
 import ui.ViewModel.BookDatabaseViewModel
 import ui.ViewModel.BookViewModel
 
-
+/**
+ * Function that displays books in the home screen
+ *   @param bookDatabaseViewModel view-model that contains the logic behind certain functions in the screen
+ *   @param bookViewModel view-model that contains the logic behind certain functions in the screen
+ *   @param navController controller that allows navigation between screens
+ */
 @Composable
 fun HomeScreen(bookViewModel: BookViewModel,navController:NavController,bookDatabaseViewModel: BookDatabaseViewModel){
     val list by bookViewModel.homeBookList.collectAsState()
@@ -67,17 +68,15 @@ fun HomeScreen(bookViewModel: BookViewModel,navController:NavController,bookData
             green = 0,
             blue = 0
         ), modifier = Modifier.padding(15.dp))
+        //if the list is empty, it shows the loading icon
         if (list.isEmpty()){
             Loading(120,90)
-            Log.d("ratinglist size 1",(ratingList.size.toString()))
         }
 
         LazyColumn(modifier= Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.915f),horizontalAlignment = Alignment.CenterHorizontally){
             items(list){book ->
-
-                        Log.d("ratinglist size 2",(ratingList.size.toString()))
                         HomescreenBooks(title = book.title,
                             author = book.authors[0].name ,
                             picId = book.cover_id,
@@ -93,15 +92,15 @@ fun HomeScreen(bookViewModel: BookViewModel,navController:NavController,bookData
                                     bookDatabaseViewModel.hasSavedDefaultValue(book.key.substring(7))
                                 },
                             rating = ratingloader(ratingList,list.indexOf(book)) )
-
-
-
                 }
             }
         NaviagtionBar(
             homeButton = {},
             searchButton = { navController.navigate(Routes.SearchScreen.route)},
-            savedButton = {},
+            savedButton = {
+                bookDatabaseViewModel.fetchBooks()
+                navController.navigate(Routes.SavedScreen.route)
+                          },
             modifier = Modifier
                 .rowWeight(1.0f)
                 .columnWeight(1.0f)
@@ -111,6 +110,14 @@ fun HomeScreen(bookViewModel: BookViewModel,navController:NavController,bookData
 
 }
 
+/**
+ * Function that prevents the app from crashing by insuring that a result is given even if it hasnt loaded from the api...
+ * yeah, should have probably done this differently and put it in the viewmodel, but i have a headache and its late
+ *
+ * @param list the list with the ratings
+ * @param index the current index
+ * @return returns 3f if the index is higher then the list size
+ */
 fun ratingloader(list : List<Float>,index:Int): Float {
     if(index < list.size){
         return list[index]
@@ -119,7 +126,14 @@ fun ratingloader(list : List<Float>,index:Int): Float {
     }
 }
 
-
+/**
+ * Function that displays the books in the home screen
+ * @param modifier enables visual editing of the function
+ * @param title the book title
+ * @param author the books author
+ * @param picId the id in order to load the book cover
+ * @param rating the ratings of the book
+ */
 @Composable
 fun HomescreenBooks(modifier: Modifier = Modifier, title: String = "", author: String = "", picId: Int,rating: Float){
     com.calculator.bookfinder.homepagebooks.TopLevel(modifier = modifier) {
@@ -168,15 +182,25 @@ fun HomescreenBooks(modifier: Modifier = Modifier, title: String = "", author: S
     }
 }
 
+/**
+ * Function that chooses what variant to display based on the ratring of the book
+ * @param rating the raing of the book
+ * @return the chosen variant based on the rating
+ */
 fun RatingsDecider(rating :Float): Property1 {
+    // if the rating is less the 2
     if (rating > 0 && rating < 2f){
         return Property1.Variant5
-    }else if(rating > 2 && rating < 3f){
+    }
+    // if the rating is bewteen 2 and 3
+    else if(rating > 2 && rating < 3f){
         return Property1.Variant4
     }
+    // if its between 3 and 4
     else if(rating > 3 && rating < 4f){
         return Property1.Variant3
     }
+    // if its between 4 and 4.5
     else if(rating > 4 && rating < 4.5f){
         return Property1.Variant2
     }
@@ -185,6 +209,11 @@ fun RatingsDecider(rating :Float): Property1 {
     }
 }
 
+/**
+ * Function that displays the loading icon
+ * @param height the height
+ * @param width the width
+ */
 @Composable
 fun Loading(height:Int,width :Int){
     Row (modifier = Modifier.fillMaxWidth(),

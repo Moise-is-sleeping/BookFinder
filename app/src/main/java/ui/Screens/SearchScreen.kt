@@ -1,6 +1,5 @@
 package ui.Screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,14 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -33,34 +29,24 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.calculator.bookfinder.R
 import com.calculator.bookfinder.accountbuttons.lindenHill
-import com.calculator.bookfinder.books.Property1
-import com.calculator.bookfinder.books.TopLevelProperty1Variant2
 import com.calculator.bookfinder.header.Header
 import com.calculator.bookfinder.header.lancelot
-import com.calculator.bookfinder.homepagebooks.Books
 import com.calculator.bookfinder.naviagtionbar.NaviagtionBar
-import com.calculator.bookfinder.searchfield.Frame5
-import com.calculator.bookfinder.searchfield.SearchButton
 import com.calculator.bookfinder.searchfield.TopLevel
 import com.google.relay.compose.BorderAlignment
-import com.google.relay.compose.BoxScopeInstance.boxAlign
 import com.google.relay.compose.BoxScopeInstance.columnWeight
 import com.google.relay.compose.BoxScopeInstance.rowWeight
 import com.google.relay.compose.RelayContainer
@@ -69,12 +55,19 @@ import com.google.relay.compose.RelayImage
 import com.google.relay.compose.relayDropShadow
 import com.google.relay.compose.tappable
 import data.Routes.Routes
+import ui.ViewModel.BookDatabaseViewModel
 import ui.ViewModel.BookViewModel
-import ui.state.BookState
 
+/**
+ * Displays the information on the serach screen
+ *
+ * @param bookDatabaseViewModel view-model that contains the logic behind certain functions in the screen
+ * @param bookViewModel view-model that contains the logic behind certain functions in the screen
+ * @param navController Controller for navigation between screens
+ */
 
 @Composable
-fun SearchScreen(bookViewModel: BookViewModel,navController: NavController)   {
+fun SearchScreen(bookDatabaseViewModel: BookDatabaseViewModel,bookViewModel: BookViewModel,navController: NavController)   {
     val searchValue by bookViewModel.searchValue.collectAsState()
     val hasSearched by bookViewModel.hasSearched.collectAsState()
     Column (modifier= Modifier
@@ -82,6 +75,7 @@ fun SearchScreen(bookViewModel: BookViewModel,navController: NavController)   {
         .background(color = Color(bookViewModel.backgroundColor())),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top){
+        //if the user starts searching the header is removed
         if (!hasSearched){
             Header(modifier = Modifier
                 .fillMaxWidth()
@@ -98,30 +92,42 @@ fun SearchScreen(bookViewModel: BookViewModel,navController: NavController)   {
                 bookViewModel.hasSearched()
             },
             bookViewModel)
+        // once they search a different function is shown
         if (hasSearched){
-            Searchresults(bookViewModel,navController)
-        }else{
-            SearchCategories(bookViewModel,navController)
+            Searchresults(bookDatabaseViewModel,bookViewModel,navController)
+
+        }
+        // the navigation bar is also removed as well as the default categories
+        else{
+            SearchCategories(bookDatabaseViewModel,bookViewModel,navController)
+            NaviagtionBar(
+                homeButton = {navController.navigate(Routes.HomeScreen.route)},
+                searchButton = {},
+                savedButton = {
+                    bookDatabaseViewModel.fetchBooks()
+                    navController.navigate(Routes.SavedScreen.route)
+                },
+                modifier = Modifier
+                    .rowWeight(1.0f)
+                    .columnWeight(1.0f)
+                    .fillMaxWidth()
+            )
         }
 
-
-        NaviagtionBar(
-            homeButton = {navController.navigate(Routes.HomeScreen.route)},
-            searchButton = {},
-            savedButton = {},
-            modifier = Modifier
-                .rowWeight(1.0f)
-                .columnWeight(1.0f)
-                .fillMaxWidth()
-        )
     }
-
 }
 
-@Composable
-fun Searchresults(bookViewModel: BookViewModel,navController: NavController) {
-    val searchResults by bookViewModel.bookList.collectAsState()
 
+/**
+ * Displays the search results.
+ *
+ * @param bookDatabaseViewModel view-model that contains the logic behind certain functions in the screen
+ * @param bookViewModel view-model that contains the logic behind certain functions in the screen
+ * @param navController Controller for navigation between screens
+ */
+@Composable
+fun Searchresults(bookDatabaseViewModel: BookDatabaseViewModel,bookViewModel: BookViewModel,navController: NavController) {
+    val searchResults by bookViewModel.bookList.collectAsState()
 
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -142,15 +148,22 @@ fun Searchresults(bookViewModel: BookViewModel,navController: NavController) {
                     modifier = Modifier.clickable {
                         bookViewModel.getBooks(it!!.key.substring(7))
                         navController.navigate(Routes.BookDescriptionScreen.route)
+                        bookDatabaseViewModel.hasSavedDefaultValue(it.key.substring(7))
                     })
             }
         }
     }
 }
-
+/**
+ * Displays the search categories.
+ *
+ * @param bookDatabaseViewModel view-model that contains the logic behind certain functions in the screen
+ * @param bookViewModel view-model that contains the logic behind certain functions in the screen
+ * @param navController Controller for navigation between screens
+ */
 
 @Composable
-fun SearchCategories(bookViewModel: BookViewModel,navController: NavController){
+fun SearchCategories(bookDatabaseViewModel: BookDatabaseViewModel, bookViewModel: BookViewModel,navController: NavController){
     val horror by bookViewModel.horrorBookList.collectAsState()
     val romance by bookViewModel.romanceBookList.collectAsState()
     val scienceFiction by bookViewModel.sciFiBookList.collectAsState()
@@ -175,6 +188,7 @@ fun SearchCategories(bookViewModel: BookViewModel,navController: NavController){
                             imageButton = {
                                 bookViewModel.getBooks(it.key.substring(7))
                                 navController.navigate(Routes.BookDescriptionScreen.route)
+                                bookDatabaseViewModel.hasSavedDefaultValue(it.key.substring(7))
                             },
                             it.cover_id.toString())
                     }
@@ -197,6 +211,7 @@ fun SearchCategories(bookViewModel: BookViewModel,navController: NavController){
                             imageButton = {
                                 bookViewModel.getBooks(it.key.substring(7))
                                 navController.navigate(Routes.BookDescriptionScreen.route)
+                                bookDatabaseViewModel.hasSavedDefaultValue(it.key.substring(7))
                             },it.cover_id.toString())
                     }
 
@@ -218,6 +233,7 @@ fun SearchCategories(bookViewModel: BookViewModel,navController: NavController){
                             imageButton = {
                                 bookViewModel.getBooks(it.key.substring(7))
                                 navController.navigate(Routes.BookDescriptionScreen.route)
+                                bookDatabaseViewModel.hasSavedDefaultValue(it.key.substring(7))
                             },it.cover_id.toString())
                     }
 
@@ -237,8 +253,9 @@ fun SearchCategories(bookViewModel: BookViewModel,navController: NavController){
                     items(novel){
                         Book(
                             imageButton = {
-                            bookViewModel.getBooks(it.key.substring(7))
-                            navController.navigate(Routes.BookDescriptionScreen.route)
+                                bookViewModel.getBooks(it.key.substring(7))
+                                navController.navigate(Routes.BookDescriptionScreen.route)
+                                bookDatabaseViewModel.hasSavedDefaultValue(it.key.substring(7))
                         },it.cover_id.toString())
                     }
 
@@ -260,6 +277,7 @@ fun SearchCategories(bookViewModel: BookViewModel,navController: NavController){
                             imageButton = {
                                 bookViewModel.getBooks(it.key.substring(7))
                                 navController.navigate(Routes.BookDescriptionScreen.route)
+                                bookDatabaseViewModel.hasSavedDefaultValue(it.key.substring(7))
                             }
                         ,it.cover_id.toString())
                     }
@@ -276,7 +294,13 @@ fun SearchCategories(bookViewModel: BookViewModel,navController: NavController){
 
 
 
-
+/**
+ * Displays the search bar.
+ *
+ * @param modifier Modifier for styling and positioning
+ * @param searchButton lambda function that allows the logic behind what happens when the button is pressed to be specified in a different function
+ * @param bookViewModel View model containing book-related logic
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(modifier:Modifier,searchButton: () -> Unit = {},bookViewModel: BookViewModel){
@@ -288,6 +312,7 @@ fun SearchBar(modifier:Modifier,searchButton: () -> Unit = {},bookViewModel: Boo
                 .height(55.dp)
                 .width(320.dp)
         ) {
+            //if the user starts typing, the back arrow appears
             if (hasSearched){
                 Column(modifier = Modifier
                     .fillMaxHeight()
@@ -342,7 +367,12 @@ fun SearchBar(modifier:Modifier,searchButton: () -> Unit = {},bookViewModel: Boo
     }
 }
 
-
+/**
+ * Displays the book cover photo
+ *
+ * @param imageButton Callback function for image button action
+ * @param picId The ID of the book image
+ */
 @Composable
 fun Book(
         imageButton :()->Unit,
@@ -352,8 +382,9 @@ fun Book(
             .height(230.dp)
             .width(158.dp)
             .padding(10.dp)
+        //if it conatains the +simbol then a plachoder us put instead of the cover image
     ) {
-        if (!picId.contains("++")){
+        if (picId.indexOf("+") == -1 ){
             AsyncImage(model ="https://covers.openlibrary.org/b/id/$picId-M.jpg" , contentDescription ="test" ,modifier= Modifier
                 .fillMaxSize()
                 .clickable { imageButton() })
@@ -364,7 +395,12 @@ fun Book(
     }
 }
 
-
+/**
+ * An edited version of the relay book function
+ *
+ * @param modifier Modifier for styling and positioning
+ * @param content Composable content of the container
+ */
 @Composable
 fun BooksEdit(
     modifier: Modifier = Modifier,
@@ -391,6 +427,14 @@ fun BooksEdit(
         )
     )
 }
+
+
+/**
+ * An edited version of the relay serach button function
+ *
+ * @param modifier Modifier for styling and positioning
+ * @param searchButton Callback function for search button action
+ */
 @Composable
 fun SearchButtonEdit(modifier: Modifier,searchButton: () -> Unit){
     RelayImage(

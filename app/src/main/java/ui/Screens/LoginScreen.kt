@@ -63,10 +63,13 @@ import com.google.relay.compose.BoxScopeInstance.rowWeight
 import data.Routes.Routes
 import ui.ViewModel.LoginViewModel
 
-
+/**
+ * Function that displays the information on the login screen
+ *   @param loginViewModel view-model that contains the logic behind certain functions in the screen
+ *   @param navController controller that allows navigation between screens
+ */
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
-    var state by remember { mutableStateOf(true) }
     Column(
         modifier = Modifier
             .background(color = Color(0xFFE5DBD0))
@@ -74,7 +77,7 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Spacer(modifier = Modifier.fillMaxHeight(0.15f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.025f))
         Text(text = "Sign In", fontFamily = lindenHill, fontSize = 50.sp,
             color = Color(
             alpha = 255,
@@ -83,7 +86,7 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
             blue = 0
             )
         )
-        Spacer(modifier = Modifier.fillMaxHeight(0.1f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.05f))
         EmailSection(modifier = Modifier
             .rowWeight(1.0f)
             .columnWeight(1.0f)
@@ -91,38 +94,14 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
             .height(75.dp),
             loginViewModel,"Email")
 
-        Spacer(modifier = Modifier.fillMaxHeight(0.15f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.075f))
         SignInPasswordSection(modifier = Modifier
             .rowWeight(1.0f)
             .columnWeight(1.0f)
             .width(335.dp)
             .height(75.dp)
             ,loginViewModel,"Password")
-        Spacer(modifier = Modifier.fillMaxHeight(0.07f))
-        Row(modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
-        )
-        {
-            Spacer(modifier = Modifier.fillMaxWidth(0.07f))
-            RadioButton(
-                selected = state,
-                onClick = { state = !state },
-                colors = RadioButtonDefaults.colors(
-                    selectedColor = Color(0xFFFBF2C0),
-                    unselectedColor= Color(0xFFFFFFFF)
-                )
-            )
-            RememeberMeProperty1Default(
-                modifier = Modifier.boxAlign(
-                    alignment = Alignment.TopStart,
-                    offset = DpOffset(
-                        x = 0.dp,
-                        y = 13.0.dp
-                    )
-                )
-            )
-        }
-        Spacer(modifier = Modifier.fillMaxHeight(0.25f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.1f))
         AccountButtons(
             buttonPressed = {
                             loginViewModel.login { navController.navigate(Routes.HomeScreen.route) }
@@ -135,7 +114,7 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
                 .height(75.dp)
                 .width(335.dp)
             )
-        Spacer(modifier = Modifier.fillMaxHeight(0.35f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.05f))
         Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
         ) {
@@ -172,7 +151,13 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
 
 
 
-
+/**
+ * Displays the email section of the login screen.
+ *
+ * @param modifier Modifier for the email section
+ * @param loginViewModel view-model that contains the logic behind certain functions in the screen
+ * @param placeHolder Placeholder text for the email field
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel,placeHolder:String) {
@@ -225,6 +210,13 @@ fun EmailSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel,pl
 }
 
 
+/**
+ * Displays the sign-in password section of the login screen.
+ *
+ * @param modifier Modifier for the sign-in password section
+ * @param loginViewModel view-model that contains the logic behind certain functions in the screen
+ * @param placeholder Placeholder text for the password field
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInPasswordSection(modifier: Modifier = Modifier, loginViewModel: LoginViewModel, placeholder:String) {
@@ -286,64 +278,3 @@ fun SignInPasswordSection(modifier: Modifier = Modifier, loginViewModel: LoginVi
 
 
 
-@Preview
-@Composable
-fun RememberMeEdited(
-    modifier: Modifier = Modifier,
-    property1: Property1 = Property1.Default,
-    remeberMeButton: () -> Unit = {}
-) {
-    when (property1) {
-        Property1.Default -> TopLevelProperty1Default(modifier = modifier) {
-            Ellipse1Property1Default(
-                remeberMeButton = remeberMeButton,
-                modifier = Modifier.boxAlign(
-                    alignment = Alignment.TopStart,
-                    offset = DpOffset(
-                        x = 26.dp,
-                        y = 0.0.dp
-                    )
-                )
-            )
-            Ellipse2Property1Default(
-                modifier = Modifier.boxAlign(
-                    alignment = Alignment.TopStart,
-                    offset = DpOffset(
-                        x = 30.0.dp,
-                        y = 15.0.dp
-                    )
-                )
-            )
-            RememeberMeProperty1Default(
-                modifier = Modifier.boxAlign(
-                    alignment = Alignment.TopStart,
-                    offset = DpOffset(
-                        x = 60.0.dp,
-                        y = 13.0.dp
-                    )
-                )
-            )
-        }
-        Property1.Variant2 -> TopLevelProperty1Variant2(modifier = modifier) {
-            Ellipse1Property1Variant2(
-                remeberMeButton = remeberMeButton,
-                modifier = Modifier.boxAlign(
-                    alignment = Alignment.TopStart,
-                    offset = DpOffset(
-                        x = 14.0.dp,
-                        y = 0.0.dp
-                    )
-                )
-            )
-            RememeberMeProperty1Variant2(
-                modifier = Modifier.boxAlign(
-                    alignment = Alignment.TopStart,
-                    offset = DpOffset(
-                        x = 60.0.dp,
-                        y = 13.0.dp
-                    )
-                )
-            )
-        }
-    }
-}

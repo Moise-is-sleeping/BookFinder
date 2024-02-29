@@ -49,7 +49,11 @@ import com.google.relay.compose.BoxScopeInstance.rowWeight
 import data.Routes.Routes
 import ui.ViewModel.LoginViewModel
 
-
+/**
+ * Function that displays the information on the register screen
+ *   @param loginViewModel view-model that contains the logic behind certain functions in the screen
+ *   @param navController controller that allows navigation between screens
+ */
 @Composable
 fun RegisterScreen(loginViewModel: LoginViewModel, navController: NavController){
     Column(modifier= Modifier
@@ -57,7 +61,7 @@ fun RegisterScreen(loginViewModel: LoginViewModel, navController: NavController)
         .background(color = Color(0xFFE5DBD0)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top){
-        Spacer(modifier = Modifier.fillMaxHeight(0.15f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.025f))
         Text(text = "Register", fontFamily = lindenHill, fontSize = 50.sp,
             color = Color(
                 alpha = 255,
@@ -66,28 +70,28 @@ fun RegisterScreen(loginViewModel: LoginViewModel, navController: NavController)
                 blue = 0
             )
         )
-        Spacer(modifier = Modifier.fillMaxHeight(0.1f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.02f))
         EmailSection(modifier = Modifier
             .rowWeight(1.0f)
             .columnWeight(1.0f)
             .width(335.dp)
             .height(75.dp)
             ,loginViewModel,"Email")
-        Spacer(modifier = Modifier.fillMaxHeight(0.12f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.035f))
         RegisterPasswordSection(modifier = Modifier
             .rowWeight(1.0f)
             .columnWeight(1.0f)
             .width(335.dp)
             .height(75.dp)
             ,loginViewModel,"Password")
-        Spacer(modifier = Modifier.fillMaxHeight(0.16f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.045f))
         SignInPasswordSection(modifier = Modifier
             .rowWeight(1.0f)
             .columnWeight(1.0f)
             .width(335.dp)
             .height(75.dp)
             ,loginViewModel,"Repeat password")
-        Spacer(modifier = Modifier.fillMaxHeight(0.24f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.05f))
         AccountButtons(
             buttonPressed = {
                 loginViewModel.createUser { navController.navigate(Routes.HomeScreen.route) }
@@ -100,7 +104,7 @@ fun RegisterScreen(loginViewModel: LoginViewModel, navController: NavController)
                 .height(75.dp)
                 .width(335.dp)
         )
-        Spacer(modifier = Modifier.fillMaxHeight(0.35f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.02f))
         Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Start
         ) {
@@ -116,12 +120,17 @@ fun RegisterScreen(loginViewModel: LoginViewModel, navController: NavController)
 
 
 
-
+/**
+ * Displays the register password section of the login screen.
+ *
+ * @param modifier Modifier for the register password section
+ * @param loginViewModel view-model that contains the logic behind certain functions in the screen
+ * @param placeholder Placeholder text for the password field
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterPasswordSection(modifier: Modifier = Modifier, loginViewModel: LoginViewModel, placeholder:String) {
     val wrongInfoBool by loginViewModel.wrongInfo.collectAsState()
-    var password by rememberSaveable { mutableStateOf("") }
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
     TopLevel(modifier = modifier) {
         PasswordIcon(
