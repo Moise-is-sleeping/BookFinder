@@ -22,23 +22,33 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-
+/**
+ * View model responsible for managing the data received from tha api and the information displayed in the ui
+ */
 class LoginViewModel:ViewModel(){
+    // Firebase authentication instance
     private val auth:FirebaseAuth= Firebase.auth
+    // Firebase Firestore instance
     private val firestore = Firebase.firestore
 
+    //if the information is wrong its set to true
     private var  _wrongInfo = MutableStateFlow<Boolean>(false)
     var wrongInfo: StateFlow<Boolean> = _wrongInfo.asStateFlow()
 
-
+    //stores the email
     var email by mutableStateOf("")
         private set
+    //Stores the password
     var password by mutableStateOf("")
         private set
+    //Stores the password
     var repeatPassword by mutableStateOf("")
         private set
 
-
+    /**
+     * Connects to firebase and authenticates the user
+     * @param onSuccess lambda function to specific what happens if the authentication is successful
+     */
     fun login(onSuccess: () -> Unit){
         viewModelScope.launch {
             try {
@@ -57,17 +67,17 @@ class LoginViewModel:ViewModel(){
         }
     }
 
-
+    /**
+     * Connects to firebase and creates a user
+     * @param onSuccess lambda function to specific what happens if the user creation is successful
+     */
     fun createUser(onSuccess: () -> Unit){
         viewModelScope.launch {
             if (password == repeatPassword){
                 try {
-                    // DCS - Utiliza el servicio de autenticación de Firebase para registrar al usuario
-                    // por email y contraseña
                     auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                // DCS - Si se realiza con éxito, almacenamos el usuario en la colección "Users"
                                 saveUser()
                                 onSuccess()
                             } else {
@@ -85,6 +95,10 @@ class LoginViewModel:ViewModel(){
         }
     }
 
+    /**
+     * Connects to firebase and creates a user
+     * @param onSuccess lambda function to specific what happens if the user creation is successful
+     */
     private fun saveUser(){
         val id = auth.currentUser?.uid
         val email = auth.currentUser?.email
@@ -93,7 +107,6 @@ class LoginViewModel:ViewModel(){
                 userId = id.toString(),
                 email = email.toString(),
             )
-            // DCS - Añade el usuario a la colección "Users" en la base de datos Firestore
             firestore.collection("Users")
                 .add(user)
                 .addOnSuccessListener { Log.d("GUARDAR OK", "Se guardó el usuario correctamente en Firestore") }
@@ -102,19 +115,29 @@ class LoginViewModel:ViewModel(){
     }
 
 
-
+    /**
+     *Resets the value of the wrongInfo variable
+     */
     fun changeError(){
         _wrongInfo.value = false
     }
 
+    /**
+     * Updates the user email variable
+     */
     fun changeEmail(email: String) {
         this.email = email
     }
 
+    /**
+     * Updates the user password
+     */
     fun changePassword(password: String) {
         this.password = password
     }
-
+    /**
+     * Updates the user password
+     */
     fun changeRepeatPassword(password: String) {
         this.repeatPassword = password
     }

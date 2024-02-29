@@ -100,7 +100,7 @@ class BookDatabaseViewModel(): ViewModel() {
                 }
                 val ids = mutableListOf<String>()
                 if (querySnapshot != null) {
-                    Log.d("retrived doc", querySnapshot.documents.toString())
+
                     for (doc in querySnapshot.documents) {
                         val bookId = doc.getString("BookId")
                         if (bookId != null){
@@ -125,16 +125,20 @@ class BookDatabaseViewModel(): ViewModel() {
     fun deleteBooks(id:String){
         firestore.collection("SavedBooks")
             .whereEqualTo("BookId", id)
+            .whereEqualTo("UserEmail",auth.currentUser?.email)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot) {
-                    document.reference.delete()
-                        .addOnSuccessListener {
-                            Log.d("deleteDocumentByFieldValue", "Document successfully deleted")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w("deleteDocumentByFieldValue", "Error deleting document", e)
-                        }
+                    if(document.getString("UserEmail")==auth.currentUser?.email){
+                        Log.d("deleted doc", querySnapshot.documents.toString())
+                        document.reference.delete()
+                            .addOnSuccessListener {
+                                Log.d("deleteDocumentByFieldValue", "Document successfully deleted")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("deleteDocumentByFieldValue", "Error deleting document", e)
+                            }
+                    }
                 }
             }
             .addOnFailureListener { e ->
@@ -174,6 +178,7 @@ class BookDatabaseViewModel(): ViewModel() {
     /**
      * initializes the function fetch books
      */
+
     init {
         fetchBooks()
     }

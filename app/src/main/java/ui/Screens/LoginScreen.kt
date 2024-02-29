@@ -61,6 +61,7 @@ import com.google.relay.compose.BoxScopeInstance.boxAlign
 import com.google.relay.compose.BoxScopeInstance.columnWeight
 import com.google.relay.compose.BoxScopeInstance.rowWeight
 import data.Routes.Routes
+import ui.ViewModel.BookDatabaseViewModel
 import ui.ViewModel.LoginViewModel
 
 /**
@@ -69,7 +70,7 @@ import ui.ViewModel.LoginViewModel
  *   @param navController controller that allows navigation between screens
  */
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
+fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController,bookDatabaseViewModel: BookDatabaseViewModel){
     Column(
         modifier = Modifier
             .background(color = Color(0xFFE5DBD0))
@@ -104,6 +105,8 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController){
         Spacer(modifier = Modifier.fillMaxHeight(0.1f))
         AccountButtons(
             buttonPressed = {
+
+                            bookDatabaseViewModel.fetchBooks()
                             loginViewModel.login { navController.navigate(Routes.HomeScreen.route) }
             },
             buttonName = "   Login",

@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -55,6 +56,9 @@ fun HomeScreen(bookViewModel: BookViewModel,navController:NavController,bookData
     val list by bookViewModel.homeBookList.collectAsState()
     val ratingList by bookViewModel.ratingList.collectAsState()
 
+    LaunchedEffect(Unit){
+        bookDatabaseViewModel.fetchBooks()
+    }
 
     Column (modifier= Modifier
         .fillMaxSize()
