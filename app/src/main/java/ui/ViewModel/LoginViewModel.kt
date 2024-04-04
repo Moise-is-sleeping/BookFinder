@@ -14,6 +14,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 
 import com.google.firebase.ktx.Firebase
+import data.Models.Friends
 import data.Models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,14 +36,22 @@ class LoginViewModel:ViewModel(){
     private var  _wrongInfo = MutableStateFlow<Boolean>(false)
     var wrongInfo: StateFlow<Boolean> = _wrongInfo.asStateFlow()
 
+    private var  _displayErrorMessage = MutableStateFlow<Boolean>(false)
+    var displayErrorMessage: StateFlow<Boolean> = _displayErrorMessage.asStateFlow()
+
+    private var  _errorMessage = MutableStateFlow<String>("")
+    var errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
+
+
     //stores the email
     var email by mutableStateOf("")
         private set
     //Stores the password
     var password by mutableStateOf("")
         private set
-    //Stores the password
-    var repeatPassword by mutableStateOf("")
+    var name by mutableStateOf("")
+        private set
+    var username by mutableStateOf("")
         private set
 
     /**
@@ -58,7 +67,9 @@ class LoginViewModel:ViewModel(){
                             onSuccess()
                         } else {
                             _wrongInfo.value = true
-                            Log.d("ERROR EN FIREBASE","Usuario y/o contrasena incorrectos")
+                            _displayErrorMessage.value = true
+                            _errorMessage.value = task.exception!!.localizedMessage.toString()
+                            Log.d("ERROR EN FIREBASE",_displayErrorMessage.value.toString())
                         }
                     }
             } catch (e: Exception){
@@ -73,7 +84,6 @@ class LoginViewModel:ViewModel(){
      */
     fun createUser(onSuccess: () -> Unit){
         viewModelScope.launch {
-            if (password == repeatPassword){
                 try {
                     auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener { task ->
@@ -83,15 +93,13 @@ class LoginViewModel:ViewModel(){
                             } else {
                                 Log.d("ERROR EN FIREBASE","Error al crear usuario")
                                 _wrongInfo.value = true
+                                _displayErrorMessage.value = true
+                                _errorMessage.value = task.exception!!.localizedMessage.toString()
                             }
                         }
                 } catch (e: Exception){
                     Log.d("ERROR CREAR USUARIO", "ERROR: ${e.localizedMessage}")
                 }
-            }
-            else{
-                _wrongInfo.value = true
-            }
         }
     }
 
@@ -106,11 +114,39 @@ class LoginViewModel:ViewModel(){
             val user = User(
                 userId = id.toString(),
                 email = email.toString(),
+                username = username,
+                fullname = name,
+                savedBooks = mutableListOf(),
+                friends = Friends(mutableListOf(), mutableListOf())
+
             )
             firestore.collection("Users")
                 .add(user)
                 .addOnSuccessListener { Log.d("GUARDAR OK", "Se guardó el usuario correctamente en Firestore") }
                 .addOnFailureListener { Log.d("ERROR AL GUARDAR", "ERROR al guardar en Firestore") }
+        }
+    }
+
+     fun checkUserName(onSuccess: () -> Unit){
+        viewModelScope.launch(Dispatchers.IO) {
+            firestore.collection("Users")
+                .whereEqualTo("username",username)
+                .get()
+                .addOnSuccessListener {
+                    Log.d("username",it.documents.toString())
+                    if (it.documents.size > 0){
+                        _wrongInfo.value = true
+                        _displayErrorMessage.value = true
+                        _errorMessage.value = "Username already in use"
+                    }
+                    else{
+                        createUser { onSuccess() }
+                    }
+
+                }
+                .addOnFailureListener {
+
+                }
         }
     }
 
@@ -135,11 +171,30 @@ class LoginViewModel:ViewModel(){
     fun changePassword(password: String) {
         this.password = password
     }
-    /**
-     * Updates the user password
-     */
-    fun changeRepeatPassword(password: String) {
-        this.repeatPassword = password
+
+    fun changeName(name: String) {
+        this.name = name
+    }
+
+    fun changeUsername(username: String) {
+        this.username = username
+    }
+
+    fun reset(){
+        name = ""
+        username = ""
+        email = ""
+        password = ""
+    }
+
+
+
+    fun displayError(){
+        _displayErrorMessage.value = true
+    }
+
+    fun DontdisplayError(){
+        _displayErrorMessage.value = false
     }
 
 

@@ -1,5 +1,6 @@
 package ui.Screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardType
@@ -71,6 +73,8 @@ import ui.ViewModel.LoginViewModel
  */
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController,bookDatabaseViewModel: BookDatabaseViewModel){
+    val errorMessage by loginViewModel.errorMessage.collectAsState()
+    val errorMessageBool by loginViewModel.displayErrorMessage.collectAsState()
     Column(
         modifier = Modifier
             .background(color = Color(0xFFE5DBD0))
@@ -124,6 +128,8 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController,book
             Spacer(modifier = Modifier.fillMaxWidth(0.1f))
             RegisterLink(
                 registerButton = {
+                    loginViewModel.changeError()
+                    loginViewModel.reset()
                     navController.navigate(Routes.RegisterScreen.route)
                 },
                 modifier = Modifier.rowWeight(1.0f)
@@ -135,6 +141,10 @@ fun LoginScreen(loginViewModel: LoginViewModel,navController: NavController,book
 
 
 
+    }
+    if (errorMessageBool){
+        Toast.makeText(LocalContext.current,errorMessage, Toast.LENGTH_SHORT).show()
+        loginViewModel.DontdisplayError()
     }
 
 }
@@ -224,7 +234,6 @@ fun EmailSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel,pl
 @Composable
 fun SignInPasswordSection(modifier: Modifier = Modifier, loginViewModel: LoginViewModel, placeholder:String) {
     val wrongInfoBool by loginViewModel.wrongInfo.collectAsState()
-    var password by rememberSaveable { mutableStateOf("") }
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
     TopLevel(modifier = modifier) {
         PasswordIcon(

@@ -1,25 +1,37 @@
 package ui.Screens
 
+
+
 import android.util.Log
+import android.content.res.Resources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +46,7 @@ import com.calculator.bookfinder.homepagebooks.BookTitle
 
 import com.calculator.bookfinder.homepagebooks.Books
 import com.calculator.bookfinder.homepagebooks.ByAuthor
+import com.calculator.bookfinder.morebuttons.MoreButtons
 import com.calculator.bookfinder.naviagtionbar.NaviagtionBar
 
 import com.calculator.bookfinder.ratings.Property1
@@ -44,6 +57,8 @@ import com.google.relay.compose.BoxScopeInstance.rowWeight
 import data.Routes.Routes
 import ui.ViewModel.BookDatabaseViewModel
 import ui.ViewModel.BookViewModel
+import ui.ViewModel.UserInteractionViewmodel
+import javax.annotation.meta.When
 
 /**
  * Function that displays books in the home screen
@@ -52,35 +67,132 @@ import ui.ViewModel.BookViewModel
  *   @param navController controller that allows navigation between screens
  */
 @Composable
-fun HomeScreen(bookViewModel: BookViewModel,navController:NavController,bookDatabaseViewModel: BookDatabaseViewModel){
-    val list by bookViewModel.homeBookList.collectAsState()
-    val ratingList by bookViewModel.ratingList.collectAsState()
-
+fun HomeScreen(bookViewModel: BookViewModel,navController:NavController,bookDatabaseViewModel: BookDatabaseViewModel,userInteractionViewmodel: UserInteractionViewmodel){
+    var moreButton by remember { mutableStateOf(false) }
+    var counter by remember { mutableIntStateOf(0) }
+    val currentScreen by userInteractionViewmodel.currentFriendsButton.collectAsState()
     LaunchedEffect(Unit){
         bookDatabaseViewModel.fetchBooks()
     }
-
+    Text(text = counter.toString())
     Column (modifier= Modifier
         .fillMaxSize()
         .background(color = Color(0xFFE5DBD0))){
         Header(modifier = Modifier
             .fillMaxWidth()
             .height(60.dp))
-        Text(text = "Recomended for you", fontFamily = lancelot, fontSize = 25.sp,       color = Color(
-            alpha = 255,
-            red = 0,
-            green = 0,
-            blue = 0
-        ), modifier = Modifier.padding(15.dp))
+        Row(
+            Modifier
+                .padding(top = 15.dp)
+                .fillMaxWidth()
+                .height(62.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
+            Spacer(modifier = Modifier.fillMaxWidth(0.05f))
+            FriendButtonEdit(
+                buttonName = "Your Feed",
+                modifier = Modifier
+                    .rowWeight(1.0f)
+                    .columnWeight(1.0f)
+                    .fillMaxHeight(0.6f)
+                    .weight(1f)
+                    .clickable {
+                        userInteractionViewmodel.currentButton(1)
+                        counter += 1
+                    }, color = userInteractionViewmodel.buttonColor(1)
+            )
+            Spacer(modifier = Modifier.fillMaxWidth(0.05f))
+            FriendButtonEdit(
+                buttonName = "Discover",
+                modifier = Modifier
+                    .rowWeight(1.0f)
+                    .columnWeight(1.0f)
+                    .fillMaxHeight(0.6f)
+                    .weight(1f)
+                    .clickable {
+                        userInteractionViewmodel.currentButton(2)
+                        counter += 1
+                    }, color = userInteractionViewmodel.buttonColor(2)
+            )
+            Spacer(modifier = Modifier.fillMaxWidth(0.05f))
+        }
         //if the list is empty, it shows the loading icon
-        if (list.isEmpty()){
-            Loading(120,90)
+        when(currentScreen){
+            1->{
+                YourFeed(bookViewModel)
+            }
+            2->{
+
+                Discover(bookViewModel,navController,bookDatabaseViewModel)
+            }
         }
 
-        LazyColumn(modifier= Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.915f),horizontalAlignment = Alignment.CenterHorizontally){
-            items(list){book ->
+        NaviagtionBar(
+            homebutton = {},
+            searchButton = { navController.navigate(Routes.SearchScreen.route)},
+            savedButton = {
+                bookDatabaseViewModel.fetchBooks()
+                navController.navigate(Routes.SavedScreen.route)
+                          },
+            moreButton = {moreButton=true},
+            modifier = Modifier
+                .rowWeight(1.0f)
+                .columnWeight(1.0f)
+                .fillMaxWidth()
+        )
+
+
+        }
+
+
+
+    if (moreButton){
+        Box(modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomEnd
+            ){
+            Box(
+                modifier = Modifier
+                    .width(205.dp)
+                    .height(190.dp)
+
+                    .background(
+                        shape = RoundedCornerShape(topStart = 200.dp),
+                        color = Color(0xFFE5DBD0)
+                    ),
+                ) {
+                MoreButtons(
+                    groupsButton = {},
+                    postsButton = {},
+                    friendsButton = {
+                        navController.navigate(Routes.FriendsScreen.route)
+                        userInteractionViewmodel.getUsernames()
+                                    },
+                    closeButton = {moreButton=false},
+                    modifier = Modifier
+                        .rowWeight(1.0f)
+                        .columnWeight(1.0f)
+                        .height(193.dp)
+                        .width(193.dp)
+
+                )
+            }
+        }
+
+    }
+
+
+}
+
+@Composable
+fun Discover(bookViewModel: BookViewModel,navController: NavController,bookDatabaseViewModel:BookDatabaseViewModel){
+    val list by bookViewModel.homeBookList.collectAsState()
+    val ratingList by bookViewModel.ratingList.collectAsState()
+    if (list.isEmpty()){
+        Loading(120,90)
+    }
+
+    LazyColumn(modifier= Modifier
+        .fillMaxWidth()
+        .fillMaxHeight(0.915f),horizontalAlignment = Alignment.CenterHorizontally){
+        items(list){book ->
                         HomescreenBooks(title = book.title,
                             author = book.authors[0].name ,
                             picId = book.cover_id,
@@ -96,22 +208,25 @@ fun HomeScreen(bookViewModel: BookViewModel,navController:NavController,bookData
                                     bookDatabaseViewModel.hasSavedDefaultValue(book.key.substring(7))
                                 },
                             rating = ratingloader(ratingList,list.indexOf(book)) )
-                }
-            }
-        NaviagtionBar(
-            homeButton = {},
-            searchButton = { navController.navigate(Routes.SearchScreen.route)},
-            savedButton = {
-                bookDatabaseViewModel.fetchBooks()
-                navController.navigate(Routes.SavedScreen.route)
-                          },
-            modifier = Modifier
-                .rowWeight(1.0f)
-                .columnWeight(1.0f)
-                .fillMaxWidth()
-        )
         }
+    }
+}
 
+
+@Composable
+fun YourFeed(bookViewModel: BookViewModel){
+    val list by bookViewModel.homeBookList.collectAsState()
+    if (list.isEmpty()){
+        Loading(120,90)
+    }
+
+    LazyColumn(modifier= Modifier
+        .fillMaxWidth()
+        .fillMaxHeight(0.915f),horizontalAlignment = Alignment.CenterHorizontally){
+        items(list){book ->
+
+        }
+    }
 }
 
 /**

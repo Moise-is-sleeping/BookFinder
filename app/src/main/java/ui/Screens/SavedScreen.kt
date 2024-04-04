@@ -30,6 +30,9 @@ import androidx.navigation.NavController
 import com.calculator.bookfinder.header.Header
 import com.calculator.bookfinder.naviagtionbar.NaviagtionBar
 import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
@@ -37,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.calculator.bookfinder.books.Books
 import com.calculator.bookfinder.header.lancelot
+import com.calculator.bookfinder.morebuttons.MoreButtons
 import com.google.relay.compose.BorderAlignment
 import com.google.relay.compose.BoxScopeInstance.boxAlign
 import com.google.relay.compose.BoxScopeInstance.columnWeight
@@ -58,7 +62,7 @@ import ui.ViewModel.BookViewModel
 @Composable
 fun SavedScreen(bookDatabaseViewModel: BookDatabaseViewModel,bookViewModel: BookViewModel, navController: NavController){
     val bookDetailsList by bookDatabaseViewModel.bookDetailsList.collectAsState()
-
+    var moreButton by remember { mutableStateOf(false) }
     Column (modifier= Modifier
         .fillMaxSize()
         .background(color = Color(bookViewModel.backgroundColor())),
@@ -119,14 +123,47 @@ fun SavedScreen(bookDatabaseViewModel: BookDatabaseViewModel,bookViewModel: Book
 
 
         NaviagtionBar(
-            homeButton = {navController.navigate(Routes.HomeScreen.route)},
+
+            homebutton = {navController.navigate(Routes.HomeScreen.route)},
             searchButton = {navController.navigate(Routes.SearchScreen.route)},
             savedButton = {},
+            moreButton = {moreButton=true},
             modifier = Modifier
                 .rowWeight(1.0f)
                 .columnWeight(1.0f)
                 .fillMaxWidth()
         )
+    }
+
+    if (moreButton){
+        Box(modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomEnd
+        ){
+            Box(
+                modifier = Modifier
+                    .width(205.dp)
+                    .height(190.dp)
+
+                    .background(
+                        shape = RoundedCornerShape(topStart = 200.dp),
+                        color = Color(0xFFE5DBD0)
+                    ),
+            ) {
+                MoreButtons(
+                    groupsButton = {},
+                    postsButton = {},
+                    friendsButton = {navController.navigate(Routes.FriendsScreen.route)},
+                    closeButton = {moreButton=false},
+                    modifier = Modifier
+                        .rowWeight(1.0f)
+                        .columnWeight(1.0f)
+                        .height(193.dp)
+                        .width(193.dp)
+
+                )
+            }
+        }
+
     }
 }
 

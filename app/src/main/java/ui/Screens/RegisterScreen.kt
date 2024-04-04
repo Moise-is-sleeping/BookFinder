@@ -1,5 +1,6 @@
 package ui.Screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -39,7 +41,11 @@ import androidx.navigation.NavController
 import com.calculator.bookfinder.accountbuttons.AccountButtons
 import com.calculator.bookfinder.accountbuttons.Property1
 import com.calculator.bookfinder.accountbuttons.lindenHill
+import com.calculator.bookfinder.icons.Name
+import com.calculator.bookfinder.icons.UserFaceMaleStreamlinePlump1
+import com.calculator.bookfinder.icons.UserInstance
 import com.calculator.bookfinder.link.Link
+import com.calculator.bookfinder.signinemail.EmailIcon
 import com.calculator.bookfinder.signinemail.TopLevel
 import com.calculator.bookfinder.signinpassword.Email
 import com.calculator.bookfinder.signinpassword.PasswordIcon
@@ -56,6 +62,8 @@ import ui.ViewModel.LoginViewModel
  */
 @Composable
 fun RegisterScreen(loginViewModel: LoginViewModel, navController: NavController){
+    val errorMessage by loginViewModel.errorMessage.collectAsState()
+    val errorMessageBool by loginViewModel.displayErrorMessage.collectAsState()
     Column(modifier= Modifier
         .fillMaxSize()
         .background(color = Color(0xFFE5DBD0)),
@@ -71,30 +79,37 @@ fun RegisterScreen(loginViewModel: LoginViewModel, navController: NavController)
             )
         )
         Spacer(modifier = Modifier.fillMaxHeight(0.02f))
+        FullNameSection(modifier = Modifier
+            .rowWeight(1.0f)
+            .columnWeight(1.0f)
+            .width(335.dp)
+            .height(75.dp)
+            ,loginViewModel,"Full Name")
+        Spacer(modifier = Modifier.fillMaxHeight(0.035f))
+        UserNameSection(modifier = Modifier
+            .rowWeight(1.0f)
+            .columnWeight(1.0f)
+            .width(335.dp)
+            .height(75.dp)
+            ,loginViewModel,"Username")
+        Spacer(modifier = Modifier.fillMaxHeight(0.035f))
         EmailSection(modifier = Modifier
             .rowWeight(1.0f)
             .columnWeight(1.0f)
             .width(335.dp)
             .height(75.dp)
             ,loginViewModel,"Email")
-        Spacer(modifier = Modifier.fillMaxHeight(0.035f))
+        Spacer(modifier = Modifier.fillMaxHeight(0.045f))
         RegisterPasswordSection(modifier = Modifier
             .rowWeight(1.0f)
             .columnWeight(1.0f)
             .width(335.dp)
             .height(75.dp)
             ,loginViewModel,"Password")
-        Spacer(modifier = Modifier.fillMaxHeight(0.045f))
-        SignInPasswordSection(modifier = Modifier
-            .rowWeight(1.0f)
-            .columnWeight(1.0f)
-            .width(335.dp)
-            .height(75.dp)
-            ,loginViewModel,"Repeat password")
         Spacer(modifier = Modifier.fillMaxHeight(0.05f))
         AccountButtons(
             buttonPressed = {
-                loginViewModel.createUser { navController.navigate(Routes.HomeScreen.route) }
+                loginViewModel.checkUserName { navController.navigate(Routes.HomeScreen.route) }
             },
             buttonName = "Register",
             property1 = Property1.Default,
@@ -110,11 +125,24 @@ fun RegisterScreen(loginViewModel: LoginViewModel, navController: NavController)
         ) {
             Spacer(modifier = Modifier.fillMaxWidth(0.1f))
             Link(
-                registerButton = {navController.navigate(Routes.LoginScreen.route)},
+                registerButton = {
+                    navController.navigate(Routes.LoginScreen.route)
+                    loginViewModel.changeError()
+                    loginViewModel.reset()
+                                 },
                 property1 = com.calculator.bookfinder.link.Property1.Variant2,
-                modifier = Modifier.rowWeight(1.0f).columnWeight(1.0f)
+                modifier = Modifier
+                    .rowWeight(1.0f)
+                    .columnWeight(1.0f)
             )
         }
+
+
+
+    }
+    if (errorMessageBool){
+        Toast.makeText(LocalContext.current,errorMessage,Toast.LENGTH_SHORT).show()
+        loginViewModel.DontdisplayError()
     }
 }
 
@@ -131,6 +159,7 @@ fun RegisterScreen(loginViewModel: LoginViewModel, navController: NavController)
 @Composable
 fun RegisterPasswordSection(modifier: Modifier = Modifier, loginViewModel: LoginViewModel, placeholder:String) {
     val wrongInfoBool by loginViewModel.wrongInfo.collectAsState()
+
     var passwordHidden by rememberSaveable { mutableStateOf(true) }
     TopLevel(modifier = modifier) {
         PasswordIcon(
@@ -152,9 +181,9 @@ fun RegisterPasswordSection(modifier: Modifier = Modifier, loginViewModel: Login
             )
         ) {
             TextField(
-                value = loginViewModel.repeatPassword,
+                value = loginViewModel.password,
                 onValueChange = {
-                    loginViewModel.changeRepeatPassword(it)
+                    loginViewModel.changePassword(it)
                     loginViewModel.changeError()
                 },
                 singleLine = true,
@@ -180,6 +209,113 @@ fun RegisterPasswordSection(modifier: Modifier = Modifier, loginViewModel: Login
                 },
                 isError = wrongInfoBool
 
+            )
+        }
+
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FullNameSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel,placeHolder:String) {
+    val wrongInfoBool by loginViewModel.wrongInfo.collectAsState()
+    var email by rememberSaveable { mutableStateOf("") }
+    TopLevel(modifier = modifier) {
+        Name(
+            modifier = Modifier.boxAlign(
+                alignment = Alignment.TopStart,
+                offset = DpOffset(
+                    x = 15.0.dp,
+                    y = 13.0.dp
+                )
+            )
+        ){
+            UserFaceMaleStreamlinePlump1(modifier = Modifier.rowWeight(1.0f).columnWeight(1.0f))
+        }
+
+        com.calculator.bookfinder.signinemail.Email(
+            modifier = Modifier.boxAlign(
+                alignment = Alignment.TopStart,
+                offset = DpOffset(
+                    x = 60.0.dp,
+                    y = 5.dp
+                )
+            )
+        ) {
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.Transparent),
+                value = loginViewModel.name,
+                onValueChange = {
+                    loginViewModel.changeName(it)
+                    loginViewModel.changeError()
+                },
+                placeholder = {
+                    Text(text = placeHolder, fontFamily = lindenHill, modifier = Modifier)
+                },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    cursorColor = Color.Black,
+                    focusedIndicatorColor = Color.Black,
+                    unfocusedIndicatorColor = Color.Black
+                ),
+                singleLine = true,
+                isError = wrongInfoBool
+            )
+        }
+    }
+}
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserNameSection(modifier: Modifier = Modifier,loginViewModel: LoginViewModel,placeHolder:String) {
+    val wrongInfoBool by loginViewModel.wrongInfo.collectAsState()
+    var email by rememberSaveable { mutableStateOf("") }
+    TopLevel(modifier = modifier) {
+        UserInstance(
+            modifier = Modifier.boxAlign(
+                alignment = Alignment.TopStart,
+                offset = DpOffset(
+                    x = 15.0.dp,
+                    y = 13.0.dp
+                )
+            )
+        )
+
+        com.calculator.bookfinder.signinemail.Email(
+            modifier = Modifier.boxAlign(
+                alignment = Alignment.TopStart,
+                offset = DpOffset(
+                    x = 60.0.dp,
+                    y = 5.dp
+                )
+            )
+        ) {
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.Transparent),
+                value = loginViewModel.username,
+                onValueChange = {
+                    loginViewModel.changeUsername(it)
+                    loginViewModel.changeError()
+                },
+                placeholder = {
+                    Text(text = placeHolder, fontFamily = lindenHill, modifier = Modifier)
+                },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    cursorColor = Color.Black,
+                    focusedIndicatorColor = Color.Black,
+                    unfocusedIndicatorColor = Color.Black
+                ),
+                singleLine = true,
+                isError = wrongInfoBool
             )
         }
     }

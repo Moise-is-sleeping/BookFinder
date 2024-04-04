@@ -9,4 +9,8 @@ sealed class Routes(val route :String) {
     object SearchScreen:Routes("SearchScreen")
     object BookDescriptionScreen:Routes("BookDescriptionScreen")
     object SavedScreen:Routes("SavedScreen")
+    object FriendsScreen:Routes("FriendsScreen")
+    object UsersProfileScreen:Routes("UsersProfileScreen")
+
+
 }

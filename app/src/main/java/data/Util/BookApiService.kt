@@ -73,6 +73,7 @@ class BookApiService() {
     private val gson = GsonBuilder()
         .setLenient()
         .create()
+
     /**
      * Retrofit object used for making API calls.
      */

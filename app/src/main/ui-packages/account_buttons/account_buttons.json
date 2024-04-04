@@ -5,7 +5,7 @@
     "type": "figma",
     "file": "1Wdswe7lGrQnpNLE54B7NS",
     "node": "141:154",
-    "version": "5183175075",
+    "version": "5416719734",
     "component-id": "4635071f746e65d7aea00bba3279b8af44fc45ef"
   },
   "default": "Property 1=Default",
@@ -23,6 +23,22 @@
       {
         "type": "text",
         "id": "Register"
+      },
+      {
+        "type": "text",
+        "id": "Logout"
+      },
+      {
+        "type": "group",
+        "id": "LogOutIcon"
+      },
+      {
+        "type": "vector",
+        "id": "Vector"
+      },
+      {
+        "type": "text",
+        "id": "Add Friend"
       }
     ],
     "modes": {
@@ -30,12 +46,6 @@
         "rules": [
           {
             "id": "top_level",
-            "padding": {
-              "left": "114.0",
-              "top": "16.0",
-              "right": "114.0",
-              "bottom": "16.0"
-            },
             "border-radius": "5.0",
             "drop-shadow": {
               "color": {
@@ -51,8 +61,7 @@
               "blend-mode": "normal"
             },
             "tap-handler": "$buttonPressed",
-            "arrangement": "row",
-            "main-axis-align": "space-between",
+            "is-structured": "false",
             "children": [
               "Login"
             ],
@@ -77,6 +86,16 @@
               "offset-y": "4.0",
               "spread": "0.0",
               "blend-mode": "normal"
+            },
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "121.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "13.0"
+              }
             },
             "color": {
               "alpha": "1.0",
@@ -173,6 +192,211 @@
             "typeface": "Linden Hill"
           }
         ]
+      },
+      "Property 1=Variant3": {
+        "rules": [
+          {
+            "id": "top_level",
+            "border-radius": "5.0",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "10.0",
+              "offset-x": "0.0",
+              "offset-y": "0.0",
+              "spread": "3.0",
+              "blend-mode": "normal"
+            },
+            "tap-handler": "$buttonPressed",
+            "is-structured": "false",
+            "children": [
+              "Logout",
+              "LogOutIcon"
+            ],
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "50.84745762711865",
+              "saturation": "0.23505976095617526",
+              "value": "0.984313725490196"
+            }
+          },
+          {
+            "id": "Logout",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "4.0",
+              "offset-x": "0.0",
+              "offset-y": "4.0",
+              "spread": "0.0",
+              "blend-mode": "normal"
+            },
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": "-17.5"
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": "0.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "87.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "34.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "Logout",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align": "left",
+            "text-size": "32.0",
+            "line-height": "1.347900390625",
+            "typeface": "Linden Hill"
+          },
+          {
+            "id": "LogOutIcon",
+            "padding": "7.0",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "213.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "7.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "40.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "space-between",
+            "children": [
+              "Vector"
+            ]
+          },
+          {
+            "id": "Vector",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "26.66666603088379"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "26.66666603088379"
+              }
+            },
+            "vector-content": "vector.svg"
+          }
+        ]
+      },
+      "Property 1=Variant4": {
+        "rules": [
+          {
+            "id": "top_level",
+            "border-radius": "5.0",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "10.0",
+              "offset-x": "0.0",
+              "offset-y": "0.0",
+              "spread": "3.0",
+              "blend-mode": "normal"
+            },
+            "tap-handler": "$buttonPressed",
+            "is-structured": "false",
+            "children": [
+              "Add Friend"
+            ],
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "50.84745762711865",
+              "saturation": "0.23505976095617526",
+              "value": "0.984313725490196"
+            }
+          },
+          {
+            "id": "Add Friend",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "4.0",
+              "offset-x": "0.0",
+              "offset-y": "4.0",
+              "spread": "0.0",
+              "blend-mode": "normal"
+            },
+            "alignment": {
+              "horizontal": {
+                "attachment": "center",
+                "offset": "0.5"
+              },
+              "vertical": {
+                "attachment": "center",
+                "offset": "-0.5"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "115.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "26.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "Add Friend",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align": "left",
+            "text-size": "25.0",
+            "line-height": "1.347900390625",
+            "typeface": "Linden Hill"
+          }
+        ]
       }
     }
   },
@@ -204,6 +428,26 @@
       "size": {
         "width": 312.0,
         "height": 67.0
+      },
+      "parameters": {
+        "buttonName": "Login"
+      }
+    },
+    {
+      "design": "Property 1=Variant3",
+      "size": {
+        "width": 360.0,
+        "height": 54.0
+      },
+      "parameters": {
+        "buttonName": "Login"
+      }
+    },
+    {
+      "design": "Property 1=Variant4",
+      "size": {
+        "width": 360.0,
+        "height": 41.0
       },
       "parameters": {
         "buttonName": "Login"

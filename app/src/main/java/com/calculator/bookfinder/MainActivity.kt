@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.calculator.bookfinder.ui.theme.BookFinderTheme
 import data.Routes.Routes
 import ui.Screens.BooKDescriptionScreen
+import ui.Screens.FriendsScreen
 import ui.Screens.HomeScreen
 import ui.Screens.HomeScreen
 import ui.Screens.LoginScreen
@@ -24,8 +25,10 @@ import ui.Screens.SavedScreen
 import ui.ViewModel.BookViewModel
 
 import ui.Screens.SearchScreen
+import ui.Screens.UsersProfileScreen
 import ui.ViewModel.BookDatabaseViewModel
 import ui.ViewModel.LoginViewModel
+import ui.ViewModel.UserInteractionViewmodel
 
 
 class MainActivity : ComponentActivity() {
@@ -41,6 +44,7 @@ class MainActivity : ComponentActivity() {
                     val bookViewModel = BookViewModel()
                     val loginViewModel = LoginViewModel()
                     val bookDatabaseViewModel = BookDatabaseViewModel()
+                    val userInteractionViewmodel = UserInteractionViewmodel()
 
                     val navController = rememberNavController()
                     NavHost(navController = navController , startDestination = Routes.LoginScreen.route ){
@@ -48,13 +52,13 @@ class MainActivity : ComponentActivity() {
                             LoginScreen(loginViewModel,navController,bookDatabaseViewModel)
                         }
                         composable(Routes.HomeScreen.route){
-                            HomeScreen(bookViewModel,navController,bookDatabaseViewModel)
+                            HomeScreen(bookViewModel,navController,bookDatabaseViewModel,userInteractionViewmodel)
                         }
                         composable(Routes.RegisterScreen.route){
                             RegisterScreen(loginViewModel,navController)
                         }
                         composable(Routes.SearchScreen.route){
-                            SearchScreen(bookDatabaseViewModel,bookViewModel,navController)
+                            SearchScreen(bookDatabaseViewModel,bookViewModel,navController,userInteractionViewmodel)
                         }
                         composable(Routes.BookDescriptionScreen.route){
                             BooKDescriptionScreen(bookDatabaseViewModel,bookViewModel, navController)
@@ -62,6 +66,13 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.SavedScreen.route){
                             SavedScreen(bookDatabaseViewModel,bookViewModel, navController)
                         }
+                        composable(Routes.FriendsScreen.route){
+                            FriendsScreen(bookViewModel,navController,bookDatabaseViewModel,userInteractionViewmodel)
+                        }
+                        composable(Routes.UsersProfileScreen.route){
+                            UsersProfileScreen(bookDatabaseViewModel,bookViewModel, navController,userInteractionViewmodel)
+                        }
+
                     }
                 }
             }

@@ -3,6 +3,7 @@ package ui.Screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,6 +47,7 @@ import com.calculator.bookfinder.R
 import com.calculator.bookfinder.accountbuttons.lindenHill
 import com.calculator.bookfinder.header.Header
 import com.calculator.bookfinder.header.lancelot
+import com.calculator.bookfinder.morebuttons.MoreButtons
 import com.calculator.bookfinder.naviagtionbar.NaviagtionBar
 import com.calculator.bookfinder.searchfield.TopLevel
 import com.google.relay.compose.BorderAlignment
@@ -57,6 +61,7 @@ import com.google.relay.compose.tappable
 import data.Routes.Routes
 import ui.ViewModel.BookDatabaseViewModel
 import ui.ViewModel.BookViewModel
+import ui.ViewModel.UserInteractionViewmodel
 
 /**
  * Displays the information on the serach screen
@@ -67,9 +72,12 @@ import ui.ViewModel.BookViewModel
  */
 
 @Composable
-fun SearchScreen(bookDatabaseViewModel: BookDatabaseViewModel,bookViewModel: BookViewModel,navController: NavController)   {
+fun SearchScreen(bookDatabaseViewModel: BookDatabaseViewModel,bookViewModel: BookViewModel,navController: NavController,userInteractionViewmodel:UserInteractionViewmodel)   {
     val searchValue by bookViewModel.searchValue.collectAsState()
     val hasSearched by bookViewModel.hasSearched.collectAsState()
+    var moreButton by remember { mutableStateOf(false) }
+
+
     Column (modifier= Modifier
         .fillMaxSize()
         .background(color = Color(bookViewModel.backgroundColor())),
@@ -101,17 +109,54 @@ fun SearchScreen(bookDatabaseViewModel: BookDatabaseViewModel,bookViewModel: Boo
         else{
             SearchCategories(bookDatabaseViewModel,bookViewModel,navController)
             NaviagtionBar(
-                homeButton = {navController.navigate(Routes.HomeScreen.route)},
+                homebutton = {navController.navigate(Routes.HomeScreen.route)},
                 searchButton = {},
                 savedButton = {
                     bookDatabaseViewModel.fetchBooks()
                     navController.navigate(Routes.SavedScreen.route)
                 },
+                moreButton = {moreButton=true},
                 modifier = Modifier
                     .rowWeight(1.0f)
                     .columnWeight(1.0f)
                     .fillMaxWidth()
             )
+        }
+
+
+
+    }
+
+    if (moreButton){
+        Box(modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomEnd
+        ){
+            Box(
+                modifier = Modifier
+                    .width(205.dp)
+                    .height(190.dp)
+
+                    .background(
+                        shape = RoundedCornerShape(topStart = 200.dp),
+                        color = Color(0xFFE5DBD0)
+                    ),
+            ) {
+                MoreButtons(
+                    groupsButton = {},
+                    postsButton = {},
+                    friendsButton = {
+                        navController.navigate(Routes.FriendsScreen.route)
+                        userInteractionViewmodel.getUsernames()
+                    },
+                    closeButton = {moreButton=false},
+                    modifier = Modifier
+                        .rowWeight(1.0f)
+                        .columnWeight(1.0f)
+                        .height(193.dp)
+                        .width(193.dp)
+
+                )
+            }
         }
 
     }
