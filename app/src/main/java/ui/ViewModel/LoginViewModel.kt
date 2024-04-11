@@ -14,7 +14,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 
 import com.google.firebase.ktx.Firebase
-import data.Models.Friends
 import data.Models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -117,8 +116,8 @@ class LoginViewModel:ViewModel(){
                 username = username,
                 fullname = name,
                 savedBooks = mutableListOf(),
-                friends = Friends(mutableListOf(), mutableListOf())
-
+                addedFriends = mutableListOf(),
+                friendRequests = mutableListOf()
             )
             firestore.collection("Users")
                 .add(user)

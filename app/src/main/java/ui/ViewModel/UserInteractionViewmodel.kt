@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.getField
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.getField
@@ -20,6 +21,8 @@ class UserInteractionViewmodel : ViewModel(){
     private val auth: FirebaseAuth = Firebase.auth
     // Firebase Firestore instance
     private val firestore = Firebase.firestore
+
+    private var myUsername = ""
 
     //the book being searched by the user
     private var  _searchValue = MutableStateFlow<String>("")
@@ -75,9 +78,9 @@ class UserInteractionViewmodel : ViewModel(){
             .whereEqualTo("email",auth.currentUser?.email)
             .get()
             .addOnSuccessListener {
-                val doc = it.documents[0].data!!.get("friends") as Map<*, *>
+                val docs = it.documents[0].data!!.get("addedFriends") as List<*>
                 val tempList = mutableListOf<String>()
-                for(friend in doc.get("addedFriends") as List<*>){
+                for (friend in docs){
                     tempList.add(friend.toString())
                 }
                 _friendsList.value = tempList
@@ -92,24 +95,36 @@ class UserInteractionViewmodel : ViewModel(){
             .addOnSuccessListener {
                 val doc = it.documents[0]
                 val userName = doc.getString("fullname")
-                val userFriends = doc.data!!.get("friends") as Map<*,*>
-                friends((userFriends.get("addedFriends") as List<*>).size.toString())
+                val userFriends = doc.data!!.get("addedFriends") as List<*>
+                friends((userFriends).size.toString())
                 name(userName.toString())
+            }
+
+    }
+
+    fun getUsersUsername(){
+        firestore.collection("Users")
+            .whereEqualTo("email",auth.currentUser!!.email)
+            .get()
+            .addOnSuccessListener{
+                val doc = it.documents[0].getString("username")
+                myUsername = doc!!
             }
     }
 
-/*    fun addFriend(username: String){
+    fun addFriend(username: String){
+        val db = FirebaseFirestore.getInstance()
         firestore.collection("Users")
-            .whereEqualTo("username,",username)
+            .whereEqualTo("username",username)
             .get()
             .addOnSuccessListener {
-                val doc = it.documents[0].id.up
-                val friendRequests = doc.get("friendRequests") as MutableList<*>
-
+                val doc = it.documents[0]
+                Log.d("usernametest",username)
+                val friendRequests = doc.data!!.get("friendRequests") as MutableList<String>
+                friendRequests.add(myUsername)
+                //update
             }
-
-
-    }*/
+    }
 
     fun matchingUsernames(username :String){
         viewModelScope.launch {

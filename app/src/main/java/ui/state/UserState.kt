@@ -1,6 +1,6 @@
 package ui.state
 
-import data.Models.Friends
+
 
 
 data class UserState(
@@ -9,5 +9,6 @@ data class UserState(
     val username:String = "",
     val fullname :String = "",
     val savedBooks:MutableList<String> = mutableListOf(),
-    val friends: Friends = Friends(mutableListOf(), mutableListOf())
+    val friendRequests:MutableList<String>  = mutableListOf(),
+    val addedFriends:MutableList<String> = mutableListOf()
 )

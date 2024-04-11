@@ -10,10 +10,7 @@ data class User(
     val username:String,
     val fullname :String,
     val savedBooks:MutableList<String>,
-    val friends:Friends
-)
-
-data class Friends(
     val friendRequests:MutableList<String>,
     val addedFriends:MutableList<String>
 )
+
